@@ -3,6 +3,34 @@
   "WorkspaceRootPath": "C:\\Users\\tiago\\source\\repos\\Battleship\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\models\\ship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\models\\ship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\models\\shipstype\\aircraft_carrier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\models\\shipstype\\aircraft_carrier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\models\\shipstype\\cruiser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\models\\shipstype\\cruiser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\models\\shipstype\\frigate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\models\\shipstype\\frigate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\models\\shipstype\\submarine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\models\\shipstype\\submarine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\models\\shipstype\\speedboat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\models\\shipstype\\speedboat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\models\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\models\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\models\\board.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\models\\board.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -26,8 +54,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 253,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 8,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
@@ -37,25 +69,105 @@
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Aircraft_Carrier.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\ShipsType\\Aircraft_Carrier.cs",
+              "RelativeDocumentMoniker": "Battleship\\Models\\ShipsType\\Aircraft_Carrier.cs",
+              "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\ShipsType\\Aircraft_Carrier.cs",
+              "RelativeToolTip": "Battleship\\Models\\ShipsType\\Aircraft_Carrier.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-27T13:24:55.993Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Cruiser.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\ShipsType\\Cruiser.cs",
+              "RelativeDocumentMoniker": "Battleship\\Models\\ShipsType\\Cruiser.cs",
+              "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\ShipsType\\Cruiser.cs",
+              "RelativeToolTip": "Battleship\\Models\\ShipsType\\Cruiser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-27T13:22:53.113Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Frigate.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\ShipsType\\Frigate.cs",
+              "RelativeDocumentMoniker": "Battleship\\Models\\ShipsType\\Frigate.cs",
+              "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\ShipsType\\Frigate.cs",
+              "RelativeToolTip": "Battleship\\Models\\ShipsType\\Frigate.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-27T13:22:46.832Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Submarine.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\ShipsType\\Submarine.cs",
+              "RelativeDocumentMoniker": "Battleship\\Models\\ShipsType\\Submarine.cs",
+              "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\ShipsType\\Submarine.cs",
+              "RelativeToolTip": "Battleship\\Models\\ShipsType\\Submarine.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-27T13:22:39.174Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Speedboat.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\ShipsType\\Speedboat.cs",
+              "RelativeDocumentMoniker": "Battleship\\Models\\ShipsType\\Speedboat.cs",
+              "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\ShipsType\\Speedboat.cs",
+              "RelativeToolTip": "Battleship\\Models\\ShipsType\\Speedboat.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-27T13:22:28.684Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Ship.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\Ship.cs",
+              "RelativeDocumentMoniker": "Battleship\\Models\\Ship.cs",
+              "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\Ship.cs",
+              "RelativeToolTip": "Battleship\\Models\\Ship.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABUAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-27T13:22:01.89Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Player.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\Player.cs",
+              "RelativeDocumentMoniker": "Battleship\\Models\\Player.cs",
+              "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\Player.cs",
+              "RelativeToolTip": "Battleship\\Models\\Player.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA0AAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-27T13:20:24.834Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "Board.cs",
               "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\Board.cs",
               "RelativeDocumentMoniker": "Battleship\\Models\\Board.cs",
               "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\Board.cs",
               "RelativeToolTip": "Battleship\\Models\\Board.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAiwBMAAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T02:48:27.2Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T02:48:27.2Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 8,
               "Title": "ViewConsole.cs",
               "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Views\\ViewConsole.cs",
               "RelativeDocumentMoniker": "Battleship\\Views\\ViewConsole.cs",
@@ -63,12 +175,11 @@
               "RelativeToolTip": "Battleship\\Views\\ViewConsole.cs",
               "ViewState": "AgIAAB8AAAAAAAAAAAA0wD4AAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T01:14:59.121Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T01:14:59.121Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 9,
               "Title": "GameController.cs",
               "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Controllers\\GameController.cs",
               "RelativeDocumentMoniker": "Battleship\\Controllers\\GameController.cs",
@@ -76,12 +187,11 @@
               "RelativeToolTip": "Battleship\\Controllers\\GameController.cs",
               "ViewState": "AgIAACgAAAAAAAAAAAAgwDwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T01:11:34.395Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T01:11:34.395Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 10,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Program.cs",
               "RelativeDocumentMoniker": "Battleship\\Program.cs",
@@ -89,8 +199,7 @@
               "RelativeToolTip": "Battleship\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T00:53:56.739Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T00:53:56.739Z"
             }
           ]
         }

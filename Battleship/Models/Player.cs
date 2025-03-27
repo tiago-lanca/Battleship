@@ -12,6 +12,8 @@ namespace Battleship.Models
         public string Name { get; set; }
         public int NumGames { get; set; }
         public int NumVitory { get; set; }
+        public Board OwnBoard { get; set; }
+        public Board AttackBoard { get; set; }
         #endregion
 
         public Player(string name)

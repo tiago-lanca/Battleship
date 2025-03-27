@@ -54,8 +54,7 @@
               "RelativeToolTip": "Battleship\\Views\\ViewConsole.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T01:14:59.121Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T01:14:59.121Z"
             },
             {
               "$type": "Document",
@@ -67,8 +66,7 @@
               "RelativeToolTip": "Battleship\\Controllers\\GameController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T01:11:34.395Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T01:11:34.395Z"
             },
             {
               "$type": "Document",
@@ -80,8 +78,7 @@
               "RelativeToolTip": "Battleship\\Interfaces\\IPlayerList.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T00:57:28.206Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T00:57:28.206Z"
             },
             {
               "$type": "Document",
@@ -91,7 +88,7 @@
               "RelativeDocumentMoniker": "Battleship\\Models\\PlayerList.cs",
               "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\PlayerList.cs",
               "RelativeToolTip": "Battleship\\Models\\PlayerList.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAQwCEAAAAvAAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAAAACEAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-27T00:57:08.296Z",
               "EditorCaption": ""
@@ -106,8 +103,7 @@
               "RelativeToolTip": "Battleship\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T00:53:56.739Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-27T00:53:56.739Z"
             }
           ]
         }

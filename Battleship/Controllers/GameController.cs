@@ -12,7 +12,11 @@ namespace Battleship.Controllers
     {
         #region Variables
 
-        public Board board = new Board();
+        public Player? Player1 { get; set; }
+        public Player? Player2 { get; set; }
+        public string[]? GameInProgress_Players = new string[2];
+        public bool GameInProgress = false;
+        public ViewConsole view = new ViewConsole();
 
         #endregion
 
@@ -41,7 +45,10 @@ namespace Battleship.Controllers
                     else view.InvalidInstruction();
                     break;
 
-                case "IJ":
+                case "IJ": // Iniciar Jogo
+                    if (_HasRequiredInputs(words.Length, 3))
+                        StartGame(words[1], words[2], playersList);
+                    else view.InvalidInstruction();
                     break;
 
                 case "IC":
@@ -50,7 +57,9 @@ namespace Battleship.Controllers
                 case "D":
                     break;
 
-                case "CN":
+                case "CN": // Colocar Navios
+                    if(words.Length > 4 && words.Length < 7)
+
                     break;
 
                 case "RN":
@@ -60,7 +69,7 @@ namespace Battleship.Controllers
                     break;
 
                 case "V":
-                    view.PrintBoard(board);
+                    view.PrintBoard(Player1, Player2);
                     break;
 
                 case "Xclear":
@@ -73,9 +82,61 @@ namespace Battleship.Controllers
             }
         }
 
-        bool _HasRequiredInputs(int nr_inputs, int nr_reqInputs)
+
+        public void StartGame(string player1, string player2, PlayerList list)
+        {
+            if (!GameInProgress)
+            { 
+                bool player1Exists = list.playersList.Exists(player => player.Name == player1);
+                bool player2Exists = list.playersList.Exists(player => player.Name == player2);
+
+                // Verifica se player 1 e player 2 estão registados
+                if (player1Exists && player2Exists)
+                {
+                    Player1 = list.playersList.Find(player => player.Name == player1);
+                    Player2 = list.playersList.Find(player => player.Name == player2);
+
+                    // Filtra alfabeticamente os jogadores para jogo
+                    SortByName_GameStart(player1, player2);
+
+                    view.GameStartedSortedNames(SortByName_GameStart(player1, player2));
+                    GameInProgress = true;
+                }
+                else
+                    view.DisplayPlayerNotRegistered();
+            }
+
+            else
+                view.DisplayGameInProgress();
+        }
+
+
+        public void Setup_Ship(Player player, string type, int row, int column, string orientation = null)
+        {
+
+        }
+
+        public bool _HasRequiredInputs(int nr_inputs, int nr_reqInputs)
         {
             return nr_inputs == nr_reqInputs;
+        }
+
+        public string[] SortByName_GameStart(string player1, string player2)
+        {
+            string[] sortedNames = new string[2];
+
+            if (player1.ToUpper()[0] < player2.ToUpper()[0])
+            {
+                sortedNames[0] = Player1.Name;
+                sortedNames[1] = Player2.Name;
+            }
+            else
+            {
+                sortedNames[0] = Player2.Name;
+                sortedNames[1] = Player1.Name;
+            }
+
+            return sortedNames;
         }
 
         #endregion

@@ -14,10 +14,5 @@ namespace Battleship.Models
         public readonly int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         //public static bool _IsNewGame = true;
         #endregion
-
-        public void PrintBoard()
-        {
-            //Console.WriteLine("");
-        }
     }
 }

@@ -14,13 +14,17 @@ namespace Battleship.Models
         public int Team { get; set; }
         public Location? Location { get; set; }
         public string Placeholder { get; set; }
+        public bool Deployed {  get; set; }
+        public ShipState State { get; set; }
 
-        public Ship(ShipType type, int team, Location location, string placeholder)
+        public Ship(ShipType type, Location location, int team, string placeholder)
         {
-            Type = type; 
-            Team = team; 
-            Location = location; 
+            Type = type;
+            Location = location;
+            Team = team;             
             Placeholder = placeholder;
+            Deployed = false;
+            State = ShipState.Alive;
         }
 
         public enum ShipType
@@ -30,7 +34,14 @@ namespace Battleship.Models
             Frigate,
             Cruiser,
             Aircraft_Carrier
-        }        
+        } 
+        
+        public enum ShipState
+        {
+            None,
+            Alive,
+            Sunk
+        }
     }
 
     public class Location

@@ -3,24 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\tiago\\source\\repos\\Battleship\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\models\\playerlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\models\\playerlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\models\\board.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\models\\board.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\views\\viewconsole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\views\\viewconsole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\interfaces\\iplayerlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\interfaces\\iplayerlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|c:\\users\\tiago\\source\\repos\\battleship\\battleship\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{58364258-6E05-4A6A-990F-F88CE4DA6E9E}|Battleship\\Battleship.csproj|solutionrelative:battleship\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 253,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,59 +42,46 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
+              "Title": "Board.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\Board.cs",
+              "RelativeDocumentMoniker": "Battleship\\Models\\Board.cs",
+              "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\Board.cs",
+              "RelativeToolTip": "Battleship\\Models\\Board.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAiwBMAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-27T02:48:27.2Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "ViewConsole.cs",
               "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Views\\ViewConsole.cs",
               "RelativeDocumentMoniker": "Battleship\\Views\\ViewConsole.cs",
               "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Views\\ViewConsole.cs",
               "RelativeToolTip": "Battleship\\Views\\ViewConsole.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAgwBUAAAACAAAAAAAAAA==",
+              "ViewState": "AgIAAB8AAAAAAAAAAAA0wD4AAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-27T01:14:59.121Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "GameController.cs",
               "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Controllers\\GameController.cs",
               "RelativeDocumentMoniker": "Battleship\\Controllers\\GameController.cs",
               "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Controllers\\GameController.cs",
               "RelativeToolTip": "Battleship\\Controllers\\GameController.cs",
-              "ViewState": "AgIAAC4AAAAAAAAAAAAgwEAAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAACgAAAAAAAAAAAAgwDwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-27T01:11:34.395Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "IPlayerList.cs",
-              "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Interfaces\\IPlayerList.cs",
-              "RelativeDocumentMoniker": "Battleship\\Interfaces\\IPlayerList.cs",
-              "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Interfaces\\IPlayerList.cs",
-              "RelativeToolTip": "Battleship\\Interfaces\\IPlayerList.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T00:57:28.206Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PlayerList.cs",
-              "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\PlayerList.cs",
-              "RelativeDocumentMoniker": "Battleship\\Models\\PlayerList.cs",
-              "ToolTip": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Models\\PlayerList.cs",
-              "RelativeToolTip": "Battleship\\Models\\PlayerList.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAAwB0AAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-27T00:57:08.296Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship\\Program.cs",
               "RelativeDocumentMoniker": "Battleship\\Program.cs",

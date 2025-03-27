@@ -10,6 +10,13 @@ namespace Battleship.Controllers
 {
     public class GameController
     {
+        #region Variables
+
+        public Board board = new Board();
+
+        #endregion
+
+        #region Functions
         public void CheckCommand(string command, ViewConsole view, PlayerList playersList)
         {
             string[] words = command.Split(' ');
@@ -53,6 +60,7 @@ namespace Battleship.Controllers
                     break;
 
                 case "V":
+                    view.PrintBoard(board);
                     break;
 
                 case "Xclear":
@@ -69,5 +77,7 @@ namespace Battleship.Controllers
         {
             return nr_inputs == nr_reqInputs;
         }
+
+        #endregion
     }
 }

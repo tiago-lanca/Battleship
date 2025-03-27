@@ -52,22 +52,18 @@ namespace Battleship.Views
         public void PrintBoard(Board board)
         {
             Console.Write("   ");
-            foreach (char letter in board.)
+            foreach (char letter in board.letters)
             {
-                Console.Write($" {letter}   ");
+                Console.Write($" {letter}  ");
             }
             Console.WriteLine("");
 
-            for (int line = 0; line < board.GetLength(0); line++)
+            for (int line = 0; line < board.numbers.Length; line++)
             {
-                Console.Write($"{numbers[line]}  ");
-                for (int col = 0; col < board.GetLength(1); col++)
+                Console.Write($"{board.numbers[line]}  ");
+                for (int col = 0; col < board.letters.Length; col++)
                 {
-                    if (board[line, col] != null)
-                        Console.Write(board[line, col].PlaceHolder);
-                    else Console.Write("   ");
-
-                    Console.Write("  ");
+                    Console.Write("   ");
                 }
                 Console.WriteLine("");
             }

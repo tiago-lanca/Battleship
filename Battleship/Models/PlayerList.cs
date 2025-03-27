@@ -11,28 +11,51 @@ namespace Battleship.Models
     public class PlayerList : IPlayerList
     {
         public List<Player> playersList = new List<Player>();
-        public ViewConsole view;
-
-        public bool IsPlayerListEmpty() { return playersList.Count == 0; }
-
-        public void RegisterPlayer()
+        public ViewConsole view = new ViewConsole();
+        
+        public void RegisterPlayer(string name)
         {
-            throw new NotImplementedException();
+            if (!playersList.Exists(player => player.Name == name))
+            {
+                Player newPlayer = new Player(name);
+                playersList.Add(newPlayer);
+                view.PlayerRegistered();
+            }
+
+            else
+                view.PlayerAlreadyExists();
         }
 
-        public void RemovePlayer()
+        public void RemovePlayer(string name)
         {
-            throw new NotImplementedException();
+            Player player = playersList.Find(player => player.Name == name);
+
+            if (player != null)
+            {
+                playersList.Remove(player);
+                view.PlayerRemoved();
+            }
+
+            else
+                view.PlayerNotFound();
         }
 
         public void ShowAllPlayers()
         {
-            playersList = playersList.OrderByDescending(player => player.Name).ToList();
+            if (IsPlayerListEmpty())
+                view.PlayerListEmpty();
 
-            foreach (Player player in playersList)
+            else
             {
-                view.DisplayAllPlayers(player);
+                playersList = playersList.OrderByDescending(player => player.Name).ToList();
+
+                foreach (Player player in playersList)
+                {
+                    view.ShowAllPlayers(player);
+                }
             }
         }
+
+        public bool IsPlayerListEmpty() { return playersList.Count == 0; }
     }
 }

@@ -9,8 +9,8 @@ namespace Battleship.Interfaces
     public interface IPlayerList
     {
         void ShowAllPlayers();
-        void RegisterPlayer();
-        void RemovePlayer();
+        void RegisterPlayer(string name);
+        void RemovePlayer(string name);
         bool IsPlayerListEmpty();
 
     }

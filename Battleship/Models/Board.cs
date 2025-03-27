@@ -17,7 +17,7 @@ namespace Battleship.Models
 
         public void PrintBoard()
         {
-            
+            //Console.WriteLine("");
         }
     }
 }

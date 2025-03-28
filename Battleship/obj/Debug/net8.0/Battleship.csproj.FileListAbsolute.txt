@@ -1,8 +1,8 @@
 C:\Users\tiago\source\repos\Battleship\Battleship\bin\Debug\net8.0\Battleship.exe
-C:\Users\tiago\source\repos\Battleship\Battleship\bin\Debug\net8.0\Battleship.deps.json
-C:\Users\tiago\source\repos\Battleship\Battleship\bin\Debug\net8.0\Battleship.runtimeconfig.json
 C:\Users\tiago\source\repos\Battleship\Battleship\bin\Debug\net8.0\Battleship.dll
 C:\Users\tiago\source\repos\Battleship\Battleship\bin\Debug\net8.0\Battleship.pdb
+C:\Users\tiago\source\repos\Battleship\Battleship\bin\Debug\net8.0\Battleship.deps.json
+C:\Users\tiago\source\repos\Battleship\Battleship\bin\Debug\net8.0\Battleship.runtimeconfig.json
 C:\Users\tiago\source\repos\Battleship\Battleship\obj\Debug\net8.0\Battleship.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\tiago\source\repos\Battleship\Battleship\obj\Debug\net8.0\Battleship.AssemblyInfoInputs.cache
 C:\Users\tiago\source\repos\Battleship\Battleship\obj\Debug\net8.0\Battleship.AssemblyInfo.cs

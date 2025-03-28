@@ -122,33 +122,21 @@ namespace Battleship.Controllers
                     Game.Player1_ShipsToDeploy ??= new List<Ship>();
                     Game.Player1_ShipsToDeploy.AddRange(new List<Ship>
                     {
-                        new Speedboat(ShipType.Speedboat, null, 1, "L"),
-                        new Speedboat(ShipType.Speedboat, null, 1, "L"),
-                        new Speedboat(ShipType.Speedboat, null, 1, "L"),
-                        new Speedboat(ShipType.Speedboat, null, 1, "L"),
-                        new Submarine(ShipType.Submarine, null, 1, "S"),
-                        new Submarine(ShipType.Submarine, null, 1, "S"),
-                        new Submarine(ShipType.Submarine, null, 1, "S"),
-                        new Frigate(ShipType.Frigate, null, 1, "F"),
-                        new Frigate(ShipType.Frigate, null, 1, "F"),
-                        new Cruiser(ShipType.Cruiser, null, 1, "C"),
-                        new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, 1, "P")
+                        new Speedboat(ShipType.Speedboat, null, null, 2, "L"),
+                        new Submarine(ShipType.Submarine, null, null, 2, "S"),
+                        new Frigate(ShipType.Frigate, null, null, 2, "F"),
+                        new Cruiser(ShipType.Cruiser, null, null, 2, "C"),
+                        new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, null, 2, "P")
                     });
 
                     Game.Player2_ShipsToDeploy ??= new List<Ship>();
                     Game.Player2_ShipsToDeploy.AddRange(new List<Ship>
                     {
-                        new Speedboat(ShipType.Speedboat, null, 2, "L"),
-                        new Speedboat(ShipType.Speedboat, null, 2, "L"),
-                        new Speedboat(ShipType.Speedboat, null, 2, "L"),
-                        new Speedboat(ShipType.Speedboat, null, 2, "L"),
-                        new Submarine(ShipType.Submarine, null, 2, "S"),
-                        new Submarine(ShipType.Submarine, null, 2, "S"),
-                        new Submarine(ShipType.Submarine, null, 2, "S"),
-                        new Frigate(ShipType.Frigate, null, 2, "F"),
-                        new Frigate(ShipType.Frigate, null, 2, "F"),
-                        new Cruiser(ShipType.Cruiser, null, 2, "C"),
-                        new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, 2, "P")
+                        new Speedboat(ShipType.Speedboat, null, null, 2, "L"),                       
+                        new Submarine(ShipType.Submarine, null, null, 2, "S"),
+                        new Frigate(ShipType.Frigate, null, null, 2, "F"),
+                        new Cruiser(ShipType.Cruiser, null, null, 2, "C"),
+                        new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, null, 2, "P")
                     });
                 }
                 else
@@ -162,35 +150,96 @@ namespace Battleship.Controllers
 
         public void Setup_Ship(Player player, string type, string row, string column, string orientation = null)
         {
-            if (IsPlayerInGame(player.Name))
+            if (Game.IsInProgress)
             {
-                switch (type)
+                if (IsPlayerInGame(player.Name))
                 {
-                    case "L":
-                        player.OwnBoard[GetRowCoord(row), GetColumnCoord(char.Parse(column))] = new Speedboat(
-                            ShipType.Speedboat,
-                            new Location(0, 0),
-                            GetPlayerTeam(player),
-                            "L"
-                            );
-                        break;
+                    var initLocation = new Location(GetRowCoord(row), GetColumnCoord(char.Parse(column)));
 
-                    case "S":
-                        break;
+                    switch (type)
+                    {
+                        case "L": // Speeboat
+                            player.OwnBoard[initLocation.Row, initLocation.Column] =
+                                new Speedboat(
+                                    ShipType.Speedboat,
+                                    new List<Location>
+                                    {
+                                        new Location(0,0)
+                                    },
+                                    orientation,
+                                    GetPlayerTeam(player),
+                                    "L"
+                                );
+                            break;
 
-                    case "F":
-                        break;
+                        case "S": // Submarine
+                            var submarine = new Submarine();
+                            bool emptySurround = true;
+                            if (orientation == "E") {
 
-                    case "C":
-                        break;
+                                // Verify if surroundings are empty spaces
+                                for (int i = 0; i < submarine.Size; i++)
+                                {
+                                    var nextSpace = player.OwnBoard[initLocation.Row, initLocation.Column + i];
 
-                    case "P":
-                        break;
-                } 
+                                    if(nextSpace != null)
+                                    {
+                                        if (player.OwnBoard[initLocation.Row - 1, initLocation.Column + i] is not null)
+                                        {
+                                            Console.WriteLine("Posição irregular.\n");
+                                            emptySurround = false;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (emptySurround)
+                                {
+                                    List<Location> locations = new List<Location>();
+
+                                    // Add's locations for the ship Location
+                                    for (int i = 0; i < submarine.Size; i++)
+                                    {
+                                        locations.Add(new Location(initLocation.Row, initLocation.Column + i));
+                                    }
+
+                                    Submarine playerSubmarine = new Submarine(
+                                        ShipType.Submarine,
+                                        locations,
+                                        orientation,
+                                        GetPlayerTeam(player),
+                                        "S"
+                                    );
+
+                                    for (int i = 0; i < submarine.Size; i++)
+                                    {
+                                        player.OwnBoard[initLocation.Row, initLocation.Column + i] = playerSubmarine;
+                                    }
+
+                                    Console.WriteLine("Navio colocado com sucesso.\n");
+                                    
+                                }
+                            }
+
+                            
+                            break;
+
+                        case "F":
+                            break;
+
+                        case "C":
+                            break;
+
+                        case "P":
+                            break;
+                    }
+                }
+
+                else
+                    view.DisplayPlayerNotInGameProgress();
             }
-
             else
-                view.DisplayPlayerNotInGameProgress();
+                view.DisplayGameNotInProgress();
         }
 
         public bool _HasRequiredInputs(int nr_inputs, int nr_reqInputs)

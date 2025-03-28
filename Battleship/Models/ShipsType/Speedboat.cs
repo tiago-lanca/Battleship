@@ -13,8 +13,8 @@ namespace Battleship.Models.ShipsType
         public int Size = 1;
         public int Quantity = 4;
 
-        public Speedboat(ShipType type, Location location, int team, string placeholder)
-            : base(type, location, team, placeholder)
+        public Speedboat(ShipType type, List<Location> location, string direction, int team, string placeholder)
+            : base(type, location, direction, team, placeholder)
         {
 
         }

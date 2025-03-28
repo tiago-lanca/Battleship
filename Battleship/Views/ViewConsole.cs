@@ -130,7 +130,7 @@ namespace Battleship.Views
             Console.Write("   ");
             foreach (char letter in boardOutline.letters)
             {
-                Console.Write($" {letter}  ");
+                Console.Write($" {letter}");
             }
             Console.WriteLine("");
 
@@ -148,7 +148,7 @@ namespace Battleship.Views
                     else
                         Console.Write(" ");
 
-                    Console.Write("   ");
+                    Console.Write(" ");
                 }
                 Console.WriteLine("");
             }
@@ -161,7 +161,7 @@ namespace Battleship.Views
             Console.Write("   ");
             foreach (char letter in boardOutline.letters)
             {
-                Console.Write($" {letter}  ");
+                Console.Write($" {letter}");
             }
             Console.WriteLine("");
 
@@ -179,7 +179,7 @@ namespace Battleship.Views
                     else
                         Console.Write(" ");
 
-                    Console.Write("   ");
+                    Console.Write(" ");
                 }
                 Console.WriteLine("");
             }
@@ -191,6 +191,11 @@ namespace Battleship.Views
             Console.WriteLine("Existe um jogo em curso.\n");
         }
 
+        public void DisplayGameNotInProgress()
+        {
+            Console.WriteLine("Não existe jogo em curso.\n");
+        }
+
         public void DisplayPlayerNotRegistered()
         {
             Console.WriteLine("Jogador não registado.\n");
@@ -199,6 +204,11 @@ namespace Battleship.Views
         public void DisplayPlayerNotInGameProgress()
         {
             Console.WriteLine("Jogador não participa no jogo em curso.\n");
+        }
+
+        public void DisplayCombatInProgress()
+        {
+            Console.WriteLine("Combate iniciado.\n");
         }
     }
 }

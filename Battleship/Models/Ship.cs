@@ -12,15 +12,18 @@ namespace Battleship.Models
     {
         public ShipType Type { get; set; }
         public int Team { get; set; }
-        public Location Location { get; set; }
-        public string Placeholder { get; set; }
+        public List<Location>? Location { get; set; }
+        public string? Direction { get; set; }
+        public string? Placeholder { get; set; }
         public bool Deployed {  get; set; }
         public ShipState State { get; set; }
 
-        public Ship(ShipType type, Location location, int team, string placeholder)
+        public Ship() { }
+        public Ship(ShipType type, List<Location> location, string direction, int team, string placeholder)
         {
             Type = type;
             Location = location;
+            Direction = direction;
             Team = team;             
             Placeholder = placeholder;
             Deployed = false;
@@ -46,15 +49,15 @@ namespace Battleship.Models
 
     public class Location
     {
-        public int Start { get; set; }
-        public int End { get; set; }
+        public int Row { get; set; }
+        public int Column { get; set; }
 
-        public Location(int start, int end)
+        public Location(int row, int column)
         {
-            Start = start;
-            End = end;
+            Row = row;
+            Column = column;
         }
 
-        public override string ToString() => $"Start: {Start} / End: {End}";
+        public override string ToString() => $"Start: {Row} / End: {Column}";
     }
 }

@@ -13,8 +13,9 @@ namespace Battleship.Models.ShipsType
         public int Size = 2;
         public int Quantity = 3;
 
-        public Submarine(ShipType type, Location location, int team, string placeholder)
-            : base(type, location, team, placeholder)
+        public Submarine() { }
+        public Submarine(ShipType type, List<Location> location, string direction, int team, string placeholder)
+            : base(type, location, direction, team, placeholder)
         {
 
         }

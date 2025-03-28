@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,8 @@ namespace Battleship.Models.ShipsType
         public int Size = 5;
         public int Quantity = 1;
 
-        public Aircraft_Carrier(ShipType type, Location location, int team, string placeholder)
-            : base(type, location, team, placeholder)
+        public Aircraft_Carrier(ShipType type, List<Location> location, string direction, int team, string placeholder)
+            : base(type, location, direction, team, placeholder)
         {
             
         }

@@ -13,8 +13,8 @@ namespace Battleship.Models.ShipsType
         public int Size = 3;
         public int Quantity = 2;
 
-        public Frigate(ShipType type, Location location, int team, string placeholder)
-            : base(type, location, team, placeholder)
+        public Frigate(ShipType type, List<Location> location, string direction, int team, string placeholder) 
+            : base(type, location, direction, team, placeholder)
         {
 
         }

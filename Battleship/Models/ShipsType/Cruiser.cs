@@ -13,8 +13,8 @@ namespace Battleship.Models.ShipsType
         public int Size = 4;
         public int Quantity = 1;
 
-        public Cruiser(ShipType type, Location location, int team, string placeholder)
-            : base(type, location, team, placeholder)
+        public Cruiser(ShipType type, List<Location> location, string direction, int team, string placeholder)
+            : base(type, location, direction, team, placeholder)
         {
 
         }

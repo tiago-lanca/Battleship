@@ -9,7 +9,7 @@ namespace Battleship.Models.ShipsType
 {
     public class Speedboat : Ship
     {
-        public readonly string Code = "L";
+        public string Code = "L";
         public int Size = 1;
         public int Quantity = 4;
 

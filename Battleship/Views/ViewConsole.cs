@@ -56,42 +56,63 @@ namespace Battleship.Views
 
         public void PrintBoard(Player player1, Player player2)
         {
-            var board = new Board();
+            Board boardOutline = new Board();
 
+            // PLAYER 1
             Console.WriteLine($"Nome: {player1.Name} Tiros: {player1.Shots} TirosEmNavios: {player1.ShotsOnTargets}" +
                                     $" NaviosAfundados: {player1.EnemySunkShips}\n");
             Console.Write("   ");
-            foreach (char letter in board.letters)
+            foreach (char letter in boardOutline.letters)
             {
                 Console.Write($" {letter}  ");
             }
             Console.WriteLine("");
 
-            for (int line = 0; line < board.numbers.Length; line++)
+            for (int line = 0; line < boardOutline.numbers.Length; line++)
             {
-                Console.Write($"{board.numbers[line]}  ");
-                for (int col = 0; col < board.letters.Length; col++)
+                if(line != 9)
+                    Console.Write($" {boardOutline.numbers[line]}  ");
+                else
+                    Console.Write($"{boardOutline.numbers[line]}  ");
+
+                for (int col = 0; col < boardOutline.letters.Length; col++)
                 {
+                    if (player1.OwnBoard[line, col] != null)
+                        Console.Write(player1.OwnBoard[line, col].Placeholder);
+                    else
+                        Console.Write(" ");
+
                     Console.Write("   ");
                 }
                 Console.WriteLine("");
             }
             Console.WriteLine("");
 
+
+            // PLAYER 2
             Console.WriteLine($"Nome: {player2.Name} Tiros: {player2.Shots} TirosEmNavios: {player2.ShotsOnTargets}" +
                                     $" NaviosAfundados: {player2.EnemySunkShips}\n");
             Console.Write("   ");
-            foreach (char letter in board.letters)
+            foreach (char letter in boardOutline.letters)
             {
                 Console.Write($" {letter}  ");
             }
             Console.WriteLine("");
 
-            for (int line = 0; line < board.numbers.Length; line++)
+            for (int line = 0; line < boardOutline.numbers.Length; line++)
             {
-                Console.Write($"{board.numbers[line]}  ");
-                for (int col = 0; col < board.letters.Length; col++)
+                if (line != 9)
+                    Console.Write($" {boardOutline.numbers[line]}  ");
+                else
+                    Console.Write($"{boardOutline.numbers[line]}  ");
+
+                for (int col = 0; col < boardOutline.letters.Length; col++)
                 {
+                    if (player2.OwnBoard[line, col] != null)
+                        Console.Write(player2.OwnBoard[line, col].Placeholder);
+                    else
+                        Console.Write(" ");
+
                     Console.Write("   ");
                 }
                 Console.WriteLine("");
@@ -107,6 +128,11 @@ namespace Battleship.Views
         public void DisplayPlayerNotRegistered()
         {
             Console.WriteLine("Jogador não registado.\n");
+        }
+
+        public void DisplayPlayerNotInGameProgress()
+        {
+            Console.WriteLine("Jogador não participa no jogo em curso.\n");
         }
     }
 }

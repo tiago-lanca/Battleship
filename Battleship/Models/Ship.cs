@@ -12,7 +12,7 @@ namespace Battleship.Models
     {
         public ShipType Type { get; set; }
         public int Team { get; set; }
-        public Location? Location { get; set; }
+        public Location Location { get; set; }
         public string Placeholder { get; set; }
         public bool Deployed {  get; set; }
         public ShipState State { get; set; }
@@ -46,15 +46,15 @@ namespace Battleship.Models
 
     public class Location
     {
-        public int Row { get; set; }
-        public int Column { get; set; }
+        public int Start { get; set; }
+        public int End { get; set; }
 
-        public Location(int row, int col)
+        public Location(int start, int end)
         {
-            Row = row;
-            Column = col;
+            Start = start;
+            End = end;
         }
 
-        public override string ToString() => $"Row: {Row} / Column: {Column}";
+        public override string ToString() => $"Start: {Start} / End: {End}";
     }
 }

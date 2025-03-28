@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Battleship.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +12,9 @@ namespace Battleship.Models.ShipsType
     {
         public readonly string Code = "C";
         public int Size = 4;
-        public int Quantity = 1;
+        public override int Quantity => 1;
 
+        public Cruiser() { }
         public Cruiser(ShipType type, List<Location> location, string direction, int team, string placeholder)
             : base(type, location, direction, team, placeholder)
         {

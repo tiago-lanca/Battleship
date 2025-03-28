@@ -160,13 +160,12 @@ namespace Battleship.Controllers
                     switch (type)
                     {
                         case "L": // Speeboat
+                            var speedboat = new Speedboat();
+
                             player.OwnBoard[initLocation.Row, initLocation.Column] =
                                 new Speedboat(
                                     ShipType.Speedboat,
-                                    new List<Location>
-                                    {
-                                        new Location(0,0)
-                                    },
+                                    new List<Location>(speedboat.AddLocations(initLocation)),
                                     orientation,
                                     GetPlayerTeam(player),
                                     "L"
@@ -174,35 +173,29 @@ namespace Battleship.Controllers
                             break;
 
                         case "S": // Submarine
-                            var submarine = new Submarine();
+                            var submarine = new Submarine();                            
 
-                            if (orientation == "E") {
+                             // Verify if surroundings are empty spaces
+                             bool emptyAround = EmptyAround(player, initLocation, submarine, orientation);
 
-                                // Verify if surroundings are empty spaces
-                                bool emptySurround = VerifySurrounding(player, initLocation, submarine);
+                             if (emptyAround)
+                             {
+                                 // Creates submarine for the player
+                                 Submarine playerSubmarine = new Submarine(
+                                     ShipType.Submarine,
+                                     new List<Location>(submarine.AddLocations(initLocation)),
+                                     orientation,
+                                     GetPlayerTeam(player),
+                                     "S"
+                                 );
 
-                                if (emptySurround)
-                                {
-                                    List<Location> locations = new List<Location>();
+                                 InsertShip_InPlayer_OwnBoard(playerSubmarine, initLocation, player, orientation);
+                                 Console.WriteLine("Navio colocado com sucesso.\n");
 
-                                    // Add's locations for the ship Location
-                                    locations = AddLocations(submarine, locations, initLocation);
-
-                                    Submarine playerSubmarine = new Submarine(
-                                        ShipType.Submarine,
-                                        locations,
-                                        orientation,
-                                        GetPlayerTeam(player),
-                                        "S"
-                                    );
-
-                                    InsertShip_InPlayer_OwnBoard(playerSubmarine, initLocation, player);
-
-                                    Console.WriteLine("Navio colocado com sucesso.\n");
-                                    //Console.WriteLine(ShipsToDeploy(ShipType.Submarine, player));
-                                    //Console.WriteLine(playerSubmarine.RemoveQuantity(1, ShipType.Submarine, player, Game));
-                                }
-                            }
+                                 //Console.WriteLine(ShipsToDeploy(ShipType.Submarine, player));
+                                 //Console.WriteLine(playerSubmarine.RemoveQuantity(1, ShipType.Submarine, player, Game));
+                             }
+                            
                             break;
 
                         case "F":
@@ -223,103 +216,122 @@ namespace Battleship.Controllers
                 view.DisplayGameNotInProgress();
         }
 
-        private void InsertShip_InPlayer_OwnBoard(Ship ship, Location initLocation, Player player)
+        private void InsertShip_InPlayer_OwnBoard(Ship ship, Location initLocation, Player player, string orientation)
         {
-            for (int i = 0; i < ship.Size; i++)
-            {
-                player.OwnBoard[initLocation.Row, initLocation.Column + i] = ship;
+            switch (orientation) {
+
+                case "E":
+                    for (int i = 0; i < ship.Size; i++)
+                    {
+                        player.OwnBoard[initLocation.Row, initLocation.Column + i] = ship;
+                    }
+                    break;
+
+                case "N":
+                    for (int i = 0; i < ship.Size; i++)
+                    {
+                        player.OwnBoard[initLocation.Row - i, initLocation.Column] = ship;
+                    }
+                    break;
             }
         }
 
-        public bool EmptySurrounding(Player player, Location initLocation, Ship ship, string orientation)
+        public bool EmptyAround(Player player, Location initLocation, Ship ship, string orientation = null)
         {
             switch (orientation)
             {
 
                 case "E":
+
                     for (int i = 0; i < ship.Size; i++)
                     {
-                        var nextSpace = player.OwnBoard[initLocation.Row, initLocation.Column + i];
+                        int row = initLocation.Row;
+                        int column = initLocation.Column + i;
 
-                        if (nextSpace == null)
+                        var nextSpace = player.OwnBoard[row, column];
+                        if (nextSpace != null)
                         {
-                            // Cima
-                            if (player.OwnBoard[initLocation.Row - 1, initLocation.Column + i] is null)
-                            {
-                                // Baixo
-                                if (player.OwnBoard[initLocation.Row + 1, initLocation.Column + i] is null)
-                                {
-                                    // Direita
-                                    if (player.OwnBoard[initLocation.Row, initLocation.Column + i + 1] is null)
-                                    {
-                                        //Esquerda
-                                        if (player.OwnBoard[initLocation.Row - 1, initLocation.Column - i - 1] is null)
-                                        {
+                            Console.WriteLine("Posição irregular.\n");
+                            return false;
+                        }
 
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("Posição irregular.\n");
-                                            return false;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("Posição irregular.\n");
-                                        return false;
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Posição irregular.\n");
-                                    return false;
-                                }
-                            }
-                            else
+                        var positionsToCheck = new (int, int)[]
+                        {
+                            (row - 1, column),
+                            (row + 1, column),
+                            (row, column + 1),
+                            (row, column - 1),
+                            (row - 1, column - 1),
+                            (row - 1, column + 1),
+                            (row + 1, column - 1),
+                            (row + 1, column +1)
+                        };
+
+                        foreach(var (r, col) in positionsToCheck)
+                        {
+                            //Console.WriteLine((r,col));
+                            if (player.OwnBoard[r, col] != null)
                             {
                                 Console.WriteLine("Posição irregular.\n");
                                 return false;
                             }
-
-                            return true;
                         }
-                        else return false;
 
+                        return true;
                     }
                     break;
 
-                    /*case "O":
-                        for (int i = 0; i < ship.Size; i++)
+                case "N":
+                    for (int i = 0; i < ship.Size; i++)
+                    {
+                        int row = initLocation.Row + i;
+                        int column = initLocation.Column;
+
+                        var nextSpace = player.OwnBoard[row, column];
+                        // Verify if the next space is empty
+                        if (nextSpace != null)
                         {
-                            var nextSpace = player.OwnBoard[initLocation.Row, initLocation.Column - i];
-
-                            if (nextSpace != null)
-                            {
-                                if (player.OwnBoard[initLocation.Row - 1, initLocation.Column - i] is not null)
-                                {
-                                    Console.WriteLine("Posição irregular.\n");
-                                    return false;
-                                }
-                            }
-                            return true;
+                            Console.WriteLine("Posição irregular.\n");
+                            return false;
                         }
-                        break;
 
+                        // Check positions around
+                        var positionsToCheck = new (int, int)[]
+                        {
+                            (row - 1, column),
+                            (row + 1, column),
+                            (row, column + 1),
+                            (row, column - 1),
+                            (row - 1, column - 1),
+                            (row - 1, column + 1),
+                            (row + 1, column - 1),
+                            (row + 1, column +1)
+                        };
 
-                        */
+                        foreach (var (r, col) in positionsToCheck)
+                        {
+                            //Console.WriteLine((r,col));
+                            if (player.OwnBoard[r, col] != null)
+                            {
+                                Console.WriteLine("Posição irregular.\n");
+                                return false;
+                            }
+                        }
 
+                        return true;
+                    }
+                    break;
+
+                default:
+                    Console.WriteLine("Posição irregular.\n");
+                    return false;           
+               
             }
+
+            return default;
         }
 
-        public List<Location> AddLocations(Ship ship, List<Location> locations, Location initLocation)
-        {
-            for (int i = 0; i < ship.Size; i++)
-            {
-                locations.Add(new Location(initLocation.Row, initLocation.Column + i));
-            }
-
-            return locations;
-        }
+        
 
         public bool _HasRequiredInputs(int nr_inputs, int nr_reqInputs)
         {

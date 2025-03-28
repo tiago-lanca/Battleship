@@ -12,7 +12,7 @@ using static Battleship.Models.Ship;
 
 namespace Battleship.Models
 {
-    public class Ship
+    public class Ship : IShip<ShipType>
     {
         public ShipType Type { get; set; }
         public virtual int Quantity { get; }
@@ -54,6 +54,17 @@ namespace Battleship.Models
             return ship.Quantity - quantity;
         }
 
+        public List<Location> AddLocations(Location initLocation)
+        {
+            List<Location> locations = new List<Location>();
+            for (int i = 0; i < Size; i++)
+            {
+                locations.Add(new Location(initLocation.Row, initLocation.Column + i));
+            }
+
+            return locations;
+        }
+
         public enum ShipType
         {
             Speedboat,
@@ -69,9 +80,7 @@ namespace Battleship.Models
             Alive,
             Sunk
         }
-    }
-
-    
+    }    
 
     public class Location
     {

@@ -73,7 +73,11 @@ namespace Battleship.Controllers
                     break;
 
                 case "V":
-                    view.PrintBoard(Game.Player1, Game.Player2);
+                    view.PrintAttackBoard(Game.Player1, Game.Player2);
+                    break;
+
+                case "XO": //Print Own Board of each player
+                    view.PrintOwnBoard(Game.Player1, Game.Player2);
                     break;
 
                 case "Xclear":

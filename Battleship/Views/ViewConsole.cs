@@ -54,7 +54,73 @@ namespace Battleship.Views
             Console.WriteLine($"Jogo iniciado entre {players[0]} e {players[1]}.\n");
         }
 
-        public void PrintBoard(Player player1, Player player2)
+        public void PrintAttackBoard(Player player1, Player player2)
+        {
+            Board boardOutline = new Board();
+
+            // PLAYER 1
+            Console.WriteLine($"Nome: {player1.Name} Tiros: {player1.Shots} TirosEmNavios: {player1.ShotsOnTargets}" +
+                                    $" NaviosAfundados: {player1.EnemySunkShips}\n");
+            Console.Write("   ");
+            foreach (char letter in boardOutline.letters)
+            {
+                Console.Write($" {letter}  ");
+            }
+            Console.WriteLine("");
+
+            for (int line = 0; line < boardOutline.numbers.Length; line++)
+            {
+                if (line != 9)
+                    Console.Write($" {boardOutline.numbers[line]}  ");
+                else
+                    Console.Write($"{boardOutline.numbers[line]}  ");
+
+                for (int col = 0; col < boardOutline.letters.Length; col++)
+                {
+                    if (player1.AttackBoard[line, col] != null)
+                        Console.Write(player1.AttackBoard[line, col].Placeholder);
+                    else
+                        Console.Write(" ");
+
+                    Console.Write("   ");
+                }
+                Console.WriteLine("");
+            }
+            Console.WriteLine("");
+
+
+            // PLAYER 2
+            Console.WriteLine($"Nome: {player2.Name} Tiros: {player2.Shots} TirosEmNavios: {player2.ShotsOnTargets}" +
+                                    $" NaviosAfundados: {player2.EnemySunkShips}\n");
+            Console.Write("   ");
+            foreach (char letter in boardOutline.letters)
+            {
+                Console.Write($" {letter}  ");
+            }
+            Console.WriteLine("");
+
+            for (int line = 0; line < boardOutline.numbers.Length; line++)
+            {
+                if (line != 9)
+                    Console.Write($" {boardOutline.numbers[line]}  ");
+                else
+                    Console.Write($"{boardOutline.numbers[line]}  ");
+
+                for (int col = 0; col < boardOutline.letters.Length; col++)
+                {
+                    if (player2.AttackBoard[line, col] != null)
+                        Console.Write(player2.AttackBoard[line, col].Placeholder);
+                    else
+                        Console.Write(" ");
+
+                    Console.Write("   ");
+                }
+                Console.WriteLine("");
+            }
+            Console.WriteLine("");
+        }
+
+        public void PrintOwnBoard(Player player1, Player player2)
         {
             Board boardOutline = new Board();
 

@@ -12,7 +12,7 @@ namespace Battleship.Models.ShipsType
     {
         public readonly string Code = "C";
         public int Size = 4;
-        public override int Quantity => 1;
+        public override int Quantity { get; set; } = 1;
 
         public Cruiser() { }
         public Cruiser(ShipType type, List<Location> location, string direction, int team, string placeholder)

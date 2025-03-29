@@ -13,7 +13,7 @@ namespace Battleship.Models.ShipsType
     {
         public string Code = "L";
         public override int Size => 1;
-        public override int Quantity => 4;
+        public override int Quantity { get; set; } = 4;
 
         public Speedboat() { }
         public Speedboat(ShipType type, List<Location> location, string direction, int team, string placeholder)

@@ -210,5 +210,15 @@ namespace Battleship.Views
         {
             Console.WriteLine("Combate iniciado.\n");
         }
+
+        public void ShipDeployed_Success()
+        {
+            Console.WriteLine("Navio colocado com sucesso.\n");
+        }
+
+        public void InvalidPosition()
+        {
+            Console.WriteLine("Posição irregular.\n");
+        }
     }
 }

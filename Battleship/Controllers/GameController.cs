@@ -91,7 +91,6 @@ namespace Battleship.Controllers
             }
         }
 
-
         public void StartGame(string player1, string player2, PlayerList list)
         {
             if (!Game.IsInProgress)
@@ -173,28 +172,35 @@ namespace Battleship.Controllers
                             break;
 
                         case "S": // Submarine
-                            var submarine = new Submarine();                            
+                            var submarine = new Submarine();
+                            int remainingSubmarines = submarine.GetRemainingQuantity(ShipType.Submarine, player, Game);
 
-                             // Verify if surroundings are empty spaces
-                             bool emptyAround = EmptyAround(player, initLocation, submarine, orientation);
+                            if (remainingSubmarines > 0)
+                            {
+                                // Verify if surroundings are empty spaces
+                                bool emptyAround = EmptyAround(player, initLocation, submarine, orientation);
 
-                             if (emptyAround)
-                             {
-                                 // Creates submarine for the player
-                                 Submarine playerSubmarine = new Submarine(
-                                     ShipType.Submarine,
-                                     new List<Location>(submarine.AddLocations(initLocation)),
-                                     orientation,
-                                     GetPlayerTeam(player),
-                                     "S"
-                                 );
+                                if (emptyAround)
+                                {
+                                    // Creates submarine for the player
+                                    Submarine playerSubmarine = new Submarine(
+                                        ShipType.Submarine,
+                                        new List<Location>(submarine.AddLocations(initLocation)),
+                                        orientation,
+                                        GetPlayerTeam(player),
+                                        "S"
+                                        );
 
-                                 InsertShip_InPlayer_OwnBoard(playerSubmarine, initLocation, player, orientation);
-                                 Console.WriteLine("Navio colocado com sucesso.\n");
+                                    InsertShip_InPlayer_OwnBoard(playerSubmarine, initLocation, player, orientation);
+                                    // Remove Quantity of ship available to deploy
+                                    playerSubmarine.RemoveQuantity(1, ShipType.Submarine, player, Game); 
 
-                                 //Console.WriteLine(ShipsToDeploy(ShipType.Submarine, player));
-                                 //Console.WriteLine(playerSubmarine.RemoveQuantity(1, ShipType.Submarine, player, Game));
-                             }
+                                    view.ShipDeployed_Success();
+
+                                    //Console.WriteLine(playerSubmarine.GetRemainingQuantity(ShipType.Submarine,player,Game));                                    
+                                    //Console.WriteLine(playerSubmarine.RemoveQuantity(1, ShipType.Submarine, player, Game));
+                                }
+                            }
                             
                             break;
 
@@ -251,7 +257,7 @@ namespace Battleship.Controllers
                         var nextSpace = player.OwnBoard[row, column];
                         if (nextSpace != null)
                         {
-                            Console.WriteLine("Posição irregular.\n");
+                            view.InvalidPosition();
                             return false;
                         }
 
@@ -272,26 +278,24 @@ namespace Battleship.Controllers
                             //Console.WriteLine((r,col));
                             if (player.OwnBoard[r, col] != null)
                             {
-                                Console.WriteLine("Posição irregular.\n");
+                                view.InvalidPosition();
                                 return false;
                             }
-                        }
-
-                        return true;
+                        }                        
                     }
-                    break;
+                    return true;
 
                 case "N":
                     for (int i = 0; i < ship.Size; i++)
                     {
-                        int row = initLocation.Row + i;
+                        int row = initLocation.Row - i;
                         int column = initLocation.Column;
 
                         var nextSpace = player.OwnBoard[row, column];
                         // Verify if the next space is empty
                         if (nextSpace != null)
                         {
-                            Console.WriteLine("Posição irregular.\n");
+                            view.InvalidPosition();
                             return false;
                         }
 
@@ -313,22 +317,18 @@ namespace Battleship.Controllers
                             //Console.WriteLine((r,col));
                             if (player.OwnBoard[r, col] != null)
                             {
-                                Console.WriteLine("Posição irregular.\n");
+                                view.InvalidPosition();
                                 return false;
                             }
                         }
-
-                        return true;
                     }
-                    break;
+                    return true;                    
 
                 default:
-                    Console.WriteLine("Posição irregular.\n");
+                    view.InvalidPosition(); ;
                     return false;           
                
             }
-
-            return default;
         }
 
         
@@ -368,11 +368,6 @@ namespace Battleship.Controllers
         public Player FindPlayer(string name)
         {
             return Game.Player1.Name == name ? Game.Player1 : Game.Player2;
-        }
-
-        public int ShipsToDeploy(ShipType shipType, Player player)
-        {
-            return new Ship().GetRemainingQuantity(shipType, player, Game);
         }
 
         public int GetRowCoord(string y)

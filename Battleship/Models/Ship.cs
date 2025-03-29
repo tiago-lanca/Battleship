@@ -15,7 +15,7 @@ namespace Battleship.Models
     public class Ship : IShip<ShipType>
     {
         public ShipType Type { get; set; }
-        public virtual int Quantity { get; }
+        public virtual int Quantity { get; set; }
         public virtual int Size { get; }
         public int Team { get; set; }
         public List<Location>? Location { get; set; }
@@ -50,8 +50,9 @@ namespace Battleship.Models
             List<Ship> shipsToDeploy = player.Name == gameVM.Player1.Name ? gameVM.Player1_ShipsToDeploy : gameVM.Player2_ShipsToDeploy;
 
             Ship ship = shipsToDeploy.FirstOrDefault(ship => ship.Type == type);
+            ship.Quantity -= quantity;
 
-            return ship.Quantity - quantity;
+            return ship.Quantity;
         }
 
         public List<Location> AddLocations(Location initLocation)
@@ -93,6 +94,6 @@ namespace Battleship.Models
             Column = column;
         }
 
-        public override string ToString() => $"Start: {Row} / End: {Column}";
+        public override string ToString() => $"Row: {Row} / Column: {Column}";
     }
 }

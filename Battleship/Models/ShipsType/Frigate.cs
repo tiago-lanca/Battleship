@@ -12,7 +12,7 @@ namespace Battleship.Models.ShipsType
     {
         public readonly string Code = "F";
         public int Size = 3;
-        public override int Quantity => 2;
+        public override int Quantity { get; set; } = 2;
 
         public Frigate() { }
         public Frigate(ShipType type, List<Location> location, string direction, int team, string placeholder) 

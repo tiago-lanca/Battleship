@@ -14,7 +14,7 @@ namespace Battleship.Models.ShipsType
     {
         public string Code = "S";
         public override int Size => 2;
-        public override int Quantity => 3;
+        public override int Quantity { get; set; } = 3;
 
         public Submarine() { }
         public Submarine(ShipType type, List<Location> location, string direction, int team, string placeholder)

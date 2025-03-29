@@ -12,7 +12,7 @@ namespace Battleship.Interfaces
     public interface IShip<T>
     {
         public int GetRemainingQuantity(T type, Player player, GameViewModel gameVM);
-        public int RemoveQuantity(int quantity, T type, Player player, GameViewModel gameVM);
+        public int RemoveQuantity(T type, Player player, GameViewModel gameVM);
         public List<Location> AddLocations(Location initLocation);
     }
 }

@@ -14,7 +14,7 @@ namespace Battleship
             string command;
 
             // Executing automated inputs for testing 
-            var inputs = new StringReader("RJ tiago\nRJ diogo\nIJ tiago diogo\nCN tiago L 1 A\nXO");
+            var inputs = new StringReader("RJ tiago\nRJ diogo\nIJ tiago diogo\nCN tiago L 2 B\nXO");
             Console.SetIn(inputs);
 
             int automatedInputs = 0;

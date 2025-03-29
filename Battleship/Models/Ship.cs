@@ -45,12 +45,12 @@ namespace Battleship.Models
             return ship.Quantity;
         }
 
-        public int RemoveQuantity(int quantity, ShipType type, Player player, GameViewModel gameVM)
+        public int RemoveQuantity(ShipType type, Player player, GameViewModel gameVM)
         {
             List<Ship> shipsToDeploy = player.Name == gameVM.Player1.Name ? gameVM.Player1_ShipsToDeploy : gameVM.Player2_ShipsToDeploy;
 
             Ship ship = shipsToDeploy.FirstOrDefault(ship => ship.Type == type);
-            ship.Quantity -= quantity;
+            ship.Quantity -= 1;
 
             return ship.Quantity;
         }

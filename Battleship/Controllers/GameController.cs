@@ -60,7 +60,13 @@ namespace Battleship.Controllers
                     else view.InvalidInstruction();
                     break;
 
-                case "D":
+                case "D": // Forfeit
+                    if (_HasRequiredInputs(words.Length, 2))
+                        ForfeitGame(FindPlayer(words[1]));
+                    else if (_HasRequiredInputs(words.Length, 3))
+                        ForfeitGame(FindPlayer(words[1]), FindPlayer(words[2]));
+                    else
+                        view.InvalidInstruction();
                     break;
 
                 case "CN": // Colocar Navios
@@ -608,6 +614,31 @@ namespace Battleship.Controllers
             
         }
         
+        private void ForfeitGame(Player player1, Player player2 = null)
+        {
+            if (player2 is null)
+            {
+                Player playerLoss = player1;
+                Player playerWin = Game.Player1.Name == player1.Name ? Game.Player2 : Game.Player1;
+                
+
+                playerWin.NumGames++;
+                playerWin.NumVictory++;
+                playerLoss.NumGames++;
+
+                
+            }
+            else
+            {
+                player1.NumGames++;
+                player2.NumGames++;
+            }
+
+            Game.IsInProgress = false;
+            Console.WriteLine("Desistência com sucesso. Jogo terminado.\n");
+
+
+        }
         public bool IsEmptyAround(Player player, int row, int column)
         {
             // Check positions around

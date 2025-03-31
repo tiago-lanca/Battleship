@@ -11,7 +11,7 @@ namespace Battleship.Models
         #region Variables
         public string Name { get; set; }
         public int NumGames { get; set; }
-        public int NumVitory { get; set; }
+        public int NumVictory { get; set; }
         public List<Ship> Ships { get; set; }
         public Ship[,] OwnBoard { get; set; }
         public Ship[,] AttackBoard { get; set; }
@@ -24,12 +24,12 @@ namespace Battleship.Models
         {
             Name = name;
             NumGames = 0;
-            NumVitory = 0;
+            NumVictory = 0;
         }
 
         public override string ToString()
         {
-            return $"{Name} {NumGames} {NumVitory}\n";
+            return $"{Name} {NumGames} {NumVictory}";
         }
     }
 }

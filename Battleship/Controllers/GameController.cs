@@ -6,12 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using static Battleship.Models.Ship;
 
 namespace Battleship.Controllers
-{
+{  
     public class GameController
     {
         #region Variables
@@ -192,6 +193,7 @@ namespace Battleship.Controllers
                             var submarine = new Submarine();
                             remainingShips = submarine.GetRemainingQuantity(ShipType.Submarine, player, Game);
 
+                            // Verify if there is available ships to deploy of that type
                             if (remainingShips > 0)
                             {
                                 // Verify if surroundings are empty spaces
@@ -210,13 +212,20 @@ namespace Battleship.Controllers
 
                                     InsertShip_InPlayer_OwnBoard(playerSubmarine, initLocation, player, orientation);
                                     // Remove Quantity of ship available to deploy
-                                    playerSubmarine.RemoveQuantity(ShipType.Submarine, player, Game); 
+                                    playerSubmarine.RemoveQuantity(ShipType.Submarine, player, Game);
 
                                     view.ShipDeployed_Success();
 
                                     //Console.WriteLine(playerSubmarine.GetRemainingQuantity(ShipType.Submarine,player,Game));                                    
                                     //Console.WriteLine(playerSubmarine.RemoveQuantity(1, ShipType.Submarine, player, Game));
                                 }
+                            }
+                            else
+                            {
+                                // Remove the submarine category from player's ShipList to deploy
+                                submarine.RemoveShipToDeploy(ShipType.Submarine, player, Game);
+
+                                view.Unavailable_ShipsTypeToDeploy();
                             }
                             
                             break;
@@ -257,6 +266,20 @@ namespace Battleship.Controllers
                     }
                     break;
 
+                case "S":
+                    for (int i = 0; i < ship.Size; i++)
+                    {
+                        player.OwnBoard[initLocation.Row + i, initLocation.Column] = ship;
+                    }
+                    break;
+
+                case "O":
+                    for (int i = 0; i < ship.Size; i++)
+                    {
+                        player.OwnBoard[initLocation.Row, initLocation.Column - i] = ship;
+                    }
+                    break;
+
                 case null:
                     player.OwnBoard[initLocation.Row, initLocation.Column] = ship;
                     break;
@@ -265,6 +288,7 @@ namespace Battleship.Controllers
 
         public bool VerifySurroundings(Player player, Location initLocation, Ship ship, string orientation = null)
         {
+
             if (orientation == null)
             {
                 int row = initLocation.Row;
@@ -278,30 +302,8 @@ namespace Battleship.Controllers
                     return false;
                 }
 
-                // Check positions around
-                var positionsToCheck = new (int, int)[]
-                {
-                        (row - 1, column),
-                        (row + 1, column),
-                        (row, column + 1),
-                        (row, column - 1),
-                        (row - 1, column - 1),
-                        (row - 1, column + 1),
-                        (row + 1, column - 1),
-                        (row + 1, column +1)
-                };
-
-                foreach (var (r, col) in positionsToCheck)
-                {
-                    //Console.WriteLine((r,col));
-                    if (player.OwnBoard[r, col] != null)
-                    {
-                        view.InvalidPosition();
-                        return false;
-                    }
-                }
-
-                return true;
+                return IsEmptyAround(player, row, column);
+                
             }
 
             switch (orientation)
@@ -310,7 +312,7 @@ namespace Battleship.Controllers
                     for (int i = 0; i < ship.Size; i++)
                     {
                         int row = initLocation.Row;
-                        int column = initLocation.Column + i;
+                        int column = initLocation.Column + i; // Right
 
                         var nextSpace = player.OwnBoard[row, column];
                         if (nextSpace != null)
@@ -319,35 +321,16 @@ namespace Battleship.Controllers
                             return false;
                         }
 
-                        var positionsToCheck = new (int, int)[]
-                        {
-                                (row - 1, column),
-                                (row + 1, column),
-                                (row, column + 1),
-                                (row, column - 1),
-                                (row - 1, column - 1),
-                                (row - 1, column + 1),
-                                (row + 1, column - 1),
-                                (row + 1, column +1)
-                        };
-
-                        foreach (var (r, col) in positionsToCheck)
-                        {
-                            //Console.WriteLine((r,col));
-                            if (player.OwnBoard[r, col] != null)
-                            {
-                                view.InvalidPosition();
-                                return false;
-                            }
-                        }
+                        if(!IsEmptyAround(player, row, column)) 
+                            return false;
                     }
-
                     return true;
+                    
 
                 case "N":
                     for (int i = 0; i < ship.Size; i++)
                     {
-                        int row = initLocation.Row - i;
+                        int row = initLocation.Row - i; // Up
                         int column = initLocation.Column;
 
                         var nextSpace = player.OwnBoard[row, column];
@@ -358,39 +341,103 @@ namespace Battleship.Controllers
                             return false;
                         }
 
-                        // Check positions around
-                        var positionsToCheck = new (int, int)[]
-                        {
-                            (row - 1, column),
-                            (row + 1, column),
-                            (row, column + 1),
-                            (row, column - 1),
-                            (row - 1, column - 1),
-                            (row - 1, column + 1),
-                            (row + 1, column - 1),
-                            (row + 1, column +1)
-                        };
-
-                        foreach (var (r, col) in positionsToCheck)
-                        {
-                            //Console.WriteLine((r,col));
-                            if (player.OwnBoard[r, col] != null)
-                            {
-                                view.InvalidPosition();
-                                return false;
-                            }
-                        }
+                        if (!IsEmptyAround(player, row, column))
+                            return false;
                     }
-
                     return true;
 
+                case "S":
+                    for (int i = 0; i < ship.Size; i++)
+                    {
+                        int row = initLocation.Row + i; // Down
+                        int column = initLocation.Column;
+
+                        var nextSpace = player.OwnBoard[row, column];
+                        // Verify if the next space is empty
+                        if (nextSpace != null)
+                        {
+                            view.InvalidPosition();
+                            return false;
+                        }
+
+                        if (!IsEmptyAround(player, row, column))
+                            return false;
+                    }
+                    return true;
+
+                case "O":
+                    for (int i = 0; i < ship.Size; i++)
+                    {
+                        int row = initLocation.Row;
+                        int column = initLocation.Column - i; // Left
+
+                        var nextSpace = player.OwnBoard[row, column];
+                        // Verify if the next space is empty
+                        if (nextSpace != null)
+                        {
+                            view.InvalidPosition();
+                            return false;
+                        }
+
+                        if (!IsEmptyAround(player, row, column))
+                            return false;
+                    }
+                    return true;
 
                 default:
                     view.InvalidPosition();
                     return false;
             }
             
-        }        
+        }
+        
+        public bool IsEmptyAround(Player player, int row, int column)
+        {
+            // Check positions around
+            var positionsToCheck = new (int, int)[]
+            {
+                        (row - 1, column),
+                        (row + 1, column),
+                        (row, column + 1),
+                        (row, column - 1),
+                        (row - 1, column - 1),
+                        (row - 1, column + 1),
+                        (row + 1, column - 1),
+                        (row + 1, column +1)
+            };
+
+            foreach (var (r, col) in positionsToCheck)
+            {
+                //Console.WriteLine((r,col));
+                if (IsInLimits(r, col) && player.OwnBoard[r, col] != null)
+                {
+                    view.InvalidPosition();
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool IsInLimits(int row, int column)
+        {
+            return row >= 0 && row < 10 && column >= 0 && column < 10;
+        }
+        
+        public bool IsInRowLimits(int row)
+        {
+            return row >= 0 && row < 10;
+        }
+
+        public bool IsInColumnLimits(int column)
+        {
+            return column >= 0 && column < 10;
+        }
+
+        /*public bool IsEmptySpace(Player player, int row, int column)
+        {
+            return player.OwnBoard[row, column] is null;
+        }*/
 
         public bool _HasRequiredInputs(int nr_inputs, int nr_reqInputs)
         {

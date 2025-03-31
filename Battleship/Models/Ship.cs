@@ -36,10 +36,22 @@ namespace Battleship.Models
             State = ShipState.Alive;
         }
 
+        public Ship GetShip(ShipType type, Player player, GameViewModel gameVM)
+        {
+            List<Ship> shipList = GetPlayerShipList(player, gameVM);
+
+            return shipList.FirstOrDefault(ship => ship.Type == type);
+        }
+
+        public void RemoveShipToDeploy(ShipType type, Player player, GameViewModel gameVM)
+        {
+            GetPlayerShipList(player,gameVM).Remove(GetShip(type, player, gameVM));
+        }        
+
         public int GetRemainingQuantity(ShipType type, Player player, GameViewModel gameVM)
         {
-            List<Ship> shipsToDeploy = player.Name == gameVM.Player1.Name ? gameVM.Player1_ShipsToDeploy : gameVM.Player2_ShipsToDeploy;
-                
+            List<Ship> shipsToDeploy = GetPlayerShipList(player, gameVM);
+
             Ship ship = shipsToDeploy.FirstOrDefault(ship => ship.Type == type);
 
             return ship.Quantity;
@@ -47,12 +59,17 @@ namespace Battleship.Models
 
         public int RemoveQuantity(ShipType type, Player player, GameViewModel gameVM)
         {
-            List<Ship> shipsToDeploy = player.Name == gameVM.Player1.Name ? gameVM.Player1_ShipsToDeploy : gameVM.Player2_ShipsToDeploy;
+            List<Ship> shipsToDeploy = GetPlayerShipList(player, gameVM);
 
             Ship ship = shipsToDeploy.FirstOrDefault(ship => ship.Type == type);
             ship.Quantity -= 1;
 
             return ship.Quantity;
+        }
+
+        public List<Ship> GetPlayerShipList(Player player, GameViewModel gameVM)
+        {
+            return player.Name == gameVM.Player1.Name ? gameVM.Player1_ShipsToDeploy : gameVM.Player2_ShipsToDeploy;
         }
 
         public List<Location> AddLocations(Location initLocation)

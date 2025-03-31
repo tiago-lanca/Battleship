@@ -216,9 +216,16 @@ namespace Battleship.Views
             Console.WriteLine("Navio colocado com sucesso.\n");
         }
 
+        public void Unavailable_ShipsTypeToDeploy()
+        {
+            Console.WriteLine("Não tem mais navios dessa tipologia disponíveis.\n");
+        }
+
         public void InvalidPosition()
         {
             Console.WriteLine("Posição irregular.\n");
         }
+
+        
     }
 }

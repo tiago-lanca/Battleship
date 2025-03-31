@@ -201,7 +201,7 @@ namespace Battleship.Views
             Console.WriteLine("Jogador não registado.\n");
         }
 
-        public void DisplayPlayerNotInGameProgress()
+        public void DisplayPlayerNotInProgressGame()
         {
             Console.WriteLine("Jogador não participa no jogo em curso.\n");
         }
@@ -230,15 +230,21 @@ namespace Battleship.Views
         {
             Console.WriteLine("Não é possivel colocar navio.\n");
         }
-
-        internal void DisplayCombatInitiate()
+        public void DisplayCombatInitiate()
         {
             Console.WriteLine("Combate iniciado.\n");
         }
-
-        internal void NeededShipsToDeploy()
+        public void NeededShipsToDeploy()
         {
             Console.WriteLine("Navios não colocados.\n");
+        }
+        public void DisplayShipNotFound()
+        {
+            Console.WriteLine("Não existe navio na posição.\n");
+        }
+        public void DisplayShipRemovedSuccess()
+        {
+            Console.WriteLine("Navio removido com sucesso.\n");
         }
     }
 }

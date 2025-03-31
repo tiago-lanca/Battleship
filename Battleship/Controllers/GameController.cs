@@ -72,7 +72,11 @@ namespace Battleship.Controllers
                         view.InvalidInstruction();
                     break;
 
-                case "RN":
+                case "RN": // Remove Ship
+                    if(_HasRequiredInputs(words.Length, 4))
+                        RemoveShip(FindPlayer(words[1]), words[2], words[3]);
+                    else
+                        view.InvalidInstruction();
                     break;
 
                 case "T":
@@ -189,6 +193,9 @@ namespace Battleship.Controllers
                                         InsertShip_InPlayer_OwnBoard(playerShip, initLocation, player);
                                         playerShip.RemoveQuantity(ShipType.Speedboat, player, Game);
 
+                                        if(playerShip.GetRemainingQuantity(ShipType.Speedboat, player, Game) == 0)
+                                            playerShip.GetPlayerShipToDeployList(player, Game).Remove(playerShip);
+
                                         view.ShipDeployed_Success();
                                     }
                                 }
@@ -218,6 +225,10 @@ namespace Battleship.Controllers
                                         InsertShip_InPlayer_OwnBoard(playerShip, initLocation, player, orientation);
                                         // Remove Quantity of ship available to deploy
                                         playerShip.RemoveQuantity(ShipType.Submarine, player, Game);
+
+                                        if (playerShip.GetRemainingQuantity(ShipType.Submarine, player, Game) == 0)
+                                            playerShip.GetPlayerShipToDeployList(player, Game).Remove(playerShip);
+
 
                                         view.ShipDeployed_Success();
                                     }
@@ -257,6 +268,10 @@ namespace Battleship.Controllers
                                         // Remove Quantity of ship available to deploy
                                         playerShip.RemoveQuantity(ShipType.Frigate, player, Game);
 
+                                        if (playerShip.GetRemainingQuantity(ShipType.Frigate, player, Game) == 0)
+                                            playerShip.GetPlayerShipToDeployList(player, Game).Remove(playerShip);
+
+
                                         view.ShipDeployed_Success();
                                     }
                                 }
@@ -294,6 +309,10 @@ namespace Battleship.Controllers
                                         InsertShip_InPlayer_OwnBoard(playerShip, initLocation, player, orientation);
                                         // Remove Quantity of ship available to deploy
                                         playerShip.RemoveQuantity(ShipType.Cruiser, player, Game);
+
+                                        if (playerShip.GetRemainingQuantity(ShipType.Cruiser, player, Game) == 0)
+                                            playerShip.GetPlayerShipToDeployList(player, Game).Remove(playerShip);
+
 
                                         view.ShipDeployed_Success();
                                     }
@@ -333,6 +352,13 @@ namespace Battleship.Controllers
                                         // Remove Quantity of ship available to deploy
                                         playerShip.RemoveQuantity(ShipType.Aircraft_Carrier, player, Game);
 
+                                        if (playerShip.GetRemainingQuantity(ShipType.Aircraft_Carrier, player, Game) == 0)
+                                        {
+                                            Ship shipToRemove = playerShip.GetPlayerShipToDeployList(player, Game).OfType<Aircraft_Carrier>().FirstOrDefault();
+                                            playerShip.GetPlayerShipToDeployList(player, Game).Remove(shipToRemove);
+                                        }
+
+
                                         view.ShipDeployed_Success();
                                     }
                                 }
@@ -351,7 +377,7 @@ namespace Battleship.Controllers
                         view.DisplayPlayerShipListEmpty();
                 }
                 else
-                    view.DisplayPlayerNotInGameProgress();
+                    view.DisplayPlayerNotInProgressGame();
             }
             else
                 view.DisplayGameNotInProgress();
@@ -395,6 +421,47 @@ namespace Battleship.Controllers
             }
         }
 
+        private void RemoveShip(Player player, string row, string column)
+        {
+            var initLocation = new Location(GetRowCoord(row), GetColumnCoord(char.Parse(column)));
+
+            if (Game.IsInProgress)
+            {
+                if (!combatInitiated)
+                {
+                    if(IsPlayerInGame(player.Name))
+                    {
+                        Ship ship = player.OwnBoard[initLocation.Row, initLocation.Column];
+                        if (ship is not null)
+                        {
+
+                            foreach(var location in ship.Location)
+                            {
+                                player.OwnBoard[location.Row, location.Column] = null;
+                            }
+
+
+                            if (ship.GetPlayerShipToDeployList(player, Game).Find(s => s.Type == ship.Type) is null)
+                            {
+                                Ship newship = ship.CreateNewShip();
+                                ship.GetPlayerShipToDeployList(player, Game).Add(ship);                                
+                            }
+
+                            view.DisplayShipRemovedSuccess();
+
+                        }
+                        else
+                            view.DisplayShipNotFound();
+                    }
+                    else
+                        view.DisplayPlayerNotInProgressGame();
+                }
+                else
+                    view.DisplayCombatInitiate();
+            }
+            else
+                view.DisplayGameNotInProgress();
+        }
         private void InitiateCombat()
         {
             if (Game.IsInProgress)

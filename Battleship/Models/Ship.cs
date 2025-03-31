@@ -37,21 +37,21 @@ namespace Battleship.Models
             State = ShipState.Alive;
         }
 
-        public Ship GetShip(ShipType type, Player player, GameViewModel gameVM)
+        public Ship GetShipByType(ShipType type, Player player, GameViewModel gameVM)
         {
-            List<Ship> shipList = GetPlayerShipList(player, gameVM);
+            List<Ship> shipList = GetPlayerShipToDeployList(player, gameVM);
 
             return shipList.FirstOrDefault(ship => ship.Type == type);
         }
 
         public void RemoveShipToDeploy(ShipType type, Player player, GameViewModel gameVM)
         {
-            GetPlayerShipList(player,gameVM).Remove(GetShip(type, player, gameVM));
+            GetPlayerShipToDeployList(player,gameVM).Remove(GetShipByType(type, player, gameVM));
         }        
 
         public int GetRemainingQuantity(ShipType type, Player player, GameViewModel gameVM)
         {
-            List<Ship> shipsToDeploy = GetPlayerShipList(player, gameVM);
+            List<Ship> shipsToDeploy = GetPlayerShipToDeployList(player, gameVM);
 
             Ship ship = shipsToDeploy.FirstOrDefault(ship => ship.Type == type);
 
@@ -60,7 +60,7 @@ namespace Battleship.Models
 
         public int RemoveQuantity(ShipType type, Player player, GameViewModel gameVM)
         {
-            List<Ship> shipsToDeploy = GetPlayerShipList(player, gameVM);
+            List<Ship> shipsToDeploy = GetPlayerShipToDeployList(player, gameVM);
 
             Ship ship = shipsToDeploy.FirstOrDefault(ship => ship.Type == type);
             ship.Quantity -= 1;
@@ -68,9 +68,32 @@ namespace Battleship.Models
             return ship.Quantity;
         }
 
-        public List<Ship> GetPlayerShipList(Player player, GameViewModel gameVM)
+        public List<Ship> GetPlayerShipToDeployList(Player player, GameViewModel gameVM)
         {
             return player.Name == gameVM.Player1.Name ? gameVM.Player1_ShipsToDeploy : gameVM.Player2_ShipsToDeploy;
+        }
+
+        public Ship CreateNewShip()
+        {
+            switch (this)
+            {
+                case Speedboat:
+                    return new Speedboat();
+
+                case Submarine:
+                    return new Submarine();
+
+                case Frigate:
+                    return new Frigate();
+
+                case Cruiser:
+                    return new Cruiser();
+
+                case Aircraft_Carrier:
+                    return new Aircraft_Carrier();
+            }
+
+            return null;
         }
 
         public List<Location> AddLocations(Location initLocation, string orientation = null)

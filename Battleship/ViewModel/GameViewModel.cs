@@ -17,5 +17,15 @@ namespace Battleship.ViewModel
         public string[]? GameInProgress_Players = new string[2];
         public bool IsInProgress = false;
 
+        public bool PlayerShipsToDeploy_Empty(Player player)
+        {
+            return player.Name == Player1.Name ? Player1_ShipsToDeploy.Count == 0 : Player2_ShipsToDeploy.Count == 0;
+        }
+
+        public bool AllPlayersShipsDeployed()
+        {
+            return Player1_ShipsToDeploy.Count == 0 && Player2_ShipsToDeploy.Count == 0;
+        }
+
     }
 }

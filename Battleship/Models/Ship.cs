@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Numerics;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,12 +73,44 @@ namespace Battleship.Models
             return player.Name == gameVM.Player1.Name ? gameVM.Player1_ShipsToDeploy : gameVM.Player2_ShipsToDeploy;
         }
 
-        public List<Location> AddLocations(Location initLocation)
+        public List<Location> AddLocations(Location initLocation, string orientation = null)
         {
             List<Location> locations = new List<Location>();
-            for (int i = 0; i < Size; i++)
+
+            switch (orientation)
             {
-                locations.Add(new Location(initLocation.Row, initLocation.Column + i));
+
+                case "E":
+                    for (int i = 0; i < Size; i++)
+                    {
+                        locations.Add(new Location(initLocation.Row, initLocation.Column + i));
+                    }
+                    break;
+
+                case "N":
+                    for (int i = 0; i < Size; i++)
+                    {
+                        locations.Add(new Location(initLocation.Row - i, initLocation.Column));
+                    }
+                    break;
+
+                case "S":
+                    for (int i = 0; i < Size; i++)
+                    {
+                        locations.Add(new Location(initLocation.Row + i, initLocation.Column));
+                    }
+                    break;
+
+                case "O":
+                    for (int i = 0; i < Size; i++)
+                    {
+                        locations.Add(new Location(initLocation.Row, initLocation.Column - i));
+                    }
+                    break;
+
+                case null:
+                    locations.Add(new Location(initLocation.Row, initLocation.Column));
+                    break;
             }
 
             return locations;

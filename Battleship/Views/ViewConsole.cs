@@ -226,6 +226,19 @@ namespace Battleship.Views
             Console.WriteLine("Posição irregular.\n");
         }
 
-        
+        public void DisplayPlayerShipListEmpty()
+        {
+            Console.WriteLine("Não é possivel colocar navio.\n");
+        }
+
+        internal void DisplayCombatInitiate()
+        {
+            Console.WriteLine("Combate iniciado.\n");
+        }
+
+        internal void NeededShipsToDeploy()
+        {
+            Console.WriteLine("Navios não colocados.\n");
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace Battleship.Controllers
     {
         #region Variables
 
-        public GameViewModel Game = new GameViewModel();
+        public GameViewModel Game;
         public ViewConsole view = new ViewConsole();
         bool combatInitiated = false;
 
@@ -108,7 +108,7 @@ namespace Battleship.Controllers
 
         private void StartGame(string player1, string player2, PlayerList list)
         {
-            if (!Game.IsInProgress)
+            if (Game is null || !Game.IsInProgress)
             {
                 bool player1Exists = list.playersList.Exists(player => player.Name == player1);
                 bool player2Exists = list.playersList.Exists(player => player.Name == player2);
@@ -116,6 +116,8 @@ namespace Battleship.Controllers
                 // Verifica se player 1 e player 2 estão registados
                 if (player1Exists && player2Exists)
                 {
+                    Game = new GameViewModel();
+
                     Game.Player1 = list.playersList.Find(player => player.Name == player1);
                     Game.Player2 = list.playersList.Find(player => player.Name == player2);
 
@@ -633,8 +635,8 @@ namespace Battleship.Controllers
                 player1.NumGames++;
                 player2.NumGames++;
             }
-
-            Game.IsInProgress = false;
+            
+            Game = null;
             Console.WriteLine("Desistência com sucesso. Jogo terminado.\n");
 
 

@@ -1,4 +1,5 @@
 ﻿using Battleship.Interfaces;
+using Battleship.ViewModel;
 using Battleship.Views;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,8 @@ namespace Battleship.Models
     {
         public List<Player> playersList = new List<Player>();
         public ViewConsole view = new ViewConsole();
-        
+        //private readonly IGameViewModel _gameVM;
+
         public void RegisterPlayer(string name)
         {
             if (!playersList.Exists(player => player.Name == name))
@@ -26,18 +28,24 @@ namespace Battleship.Models
                 view.PlayerAlreadyExists();
         }
 
-        public void RemovePlayer(string name)
+        public void RemovePlayer(string name, GameViewModel gameVM)
         {
             Player player = playersList.Find(player => player.Name == name);
 
-            if (player != null)
+            if (player is null)
             {
-                playersList.Remove(player);
-                view.PlayerRemoved();
+                view.PlayerNotFound();
+                return;
             }
 
-            else
-                view.PlayerNotFound();
+            if(gameVM.FindPlayer_InProgressGame(name))
+            {
+                view.DisplayPlayerInProgressGame();
+                return;
+            }
+
+            playersList.Remove(player);
+            view.PlayerRemoved();
         }
 
         public void ShowAllPlayers()

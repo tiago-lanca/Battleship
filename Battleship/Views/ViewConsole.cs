@@ -1,4 +1,5 @@
 ﻿using Battleship.Models;
+using Battleship.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,10 @@ namespace Battleship.Views
 {
     public class ViewConsole
     {
-
         public string GetCommand()
         {
             return Console.ReadLine()!;
         }
-
         public void InvalidInstruction()
         {
             Console.WriteLine("Instrução inválida.\n");
@@ -64,7 +63,7 @@ namespace Battleship.Views
             Console.Write("   ");
             foreach (char letter in boardOutline.letters)
             {
-                Console.Write($" {letter}  ");
+                Console.Write($" {letter}");
             }
             Console.WriteLine("");
 
@@ -82,7 +81,7 @@ namespace Battleship.Views
                     else
                         Console.Write(" ");
 
-                    Console.Write("   ");
+                    Console.Write(" ");
                 }
                 Console.WriteLine("");
             }
@@ -95,7 +94,7 @@ namespace Battleship.Views
             Console.Write("   ");
             foreach (char letter in boardOutline.letters)
             {
-                Console.Write($" {letter}  ");
+                Console.Write($" {letter}");
             }
             Console.WriteLine("");
 
@@ -113,7 +112,7 @@ namespace Battleship.Views
                     else
                         Console.Write(" ");
 
-                    Console.Write("   ");
+                    Console.Write(" ");
                 }
                 Console.WriteLine("");
             }
@@ -225,7 +224,6 @@ namespace Battleship.Views
         {
             Console.WriteLine("Posição irregular.\n");
         }
-
         public void DisplayPlayerShipListEmpty()
         {
             Console.WriteLine("Não é possivel colocar navio.\n");
@@ -245,6 +243,27 @@ namespace Battleship.Views
         public void DisplayShipRemovedSuccess()
         {
             Console.WriteLine("Navio removido com sucesso.\n");
+        }
+        public void DisplayCombatNotInitiate()
+        {
+            Console.WriteLine("Jogo em curso sem combate iniciado.\n");
+        }
+        public void DisplaySunkShip(Player defender, Location attackLocation, GameViewModel gameVM)
+        {
+            Console.WriteLine($"Navio {gameVM.GetShipType_PT(defender, attackLocation)} afundado.\n");
+        }
+
+        public void DisplayShipHit(Player defender, Location attackLocation, GameViewModel gameVM)
+        {
+            Console.WriteLine($"Navio {gameVM.GetShipType_PT(defender, attackLocation)} acertado.\n");
+        }
+        public void GameFinished()
+        {
+            Console.WriteLine("Jogo terminado.\n");
+        }
+        public void DisplayPlayerInProgressGame()
+        {
+            Console.WriteLine("Jogador participa no jogo em curso.\n");
         }
     }
 }

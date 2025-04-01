@@ -22,7 +22,6 @@ namespace Battleship.Models
         public List<Location>? Location { get; set; }
         public string? Direction { get; set; }
         public string? Placeholder { get; set; }
-        public bool Deployed {  get; set; }
         public ShipState State { get; set; }
 
         public Ship() { }
@@ -33,46 +32,51 @@ namespace Battleship.Models
             Direction = direction;
             Team = team;             
             Placeholder = placeholder;
-            Deployed = false;
             State = ShipState.Alive;
         }
 
-        public Ship GetShipByType(ShipType type, Player player, GameViewModel gameVM)
-        {
-            List<Ship> shipList = GetPlayerShipToDeployList(player, gameVM);
-
-            return shipList.FirstOrDefault(ship => ship.Type == type);
-        }
-
-        public void RemoveShipToDeploy(ShipType type, Player player, GameViewModel gameVM)
-        {
-            GetPlayerShipToDeployList(player,gameVM).Remove(GetShipByType(type, player, gameVM));
-        }        
-
+        
         public int GetRemainingQuantity(ShipType type, Player player, GameViewModel gameVM)
         {
-            List<Ship> shipsToDeploy = GetPlayerShipToDeployList(player, gameVM);
+            List<Ship> shipsToDeploy = gameVM.GetPlayerShipToDeployList(player, gameVM);
 
             Ship ship = shipsToDeploy.FirstOrDefault(ship => ship.Type == type);
 
             return ship.Quantity;
         }
 
-        public int RemoveQuantity(ShipType type, Player player, GameViewModel gameVM)
+        public int RemoveQuantityToDeploy(ShipType type, Player player, GameViewModel gameVM)
         {
-            List<Ship> shipsToDeploy = GetPlayerShipToDeployList(player, gameVM);
+            List<Ship> shipsToDeploy = gameVM.GetPlayerShipToDeployList(player, gameVM);
 
             Ship ship = shipsToDeploy.FirstOrDefault(ship => ship.Type == type);
             ship.Quantity -= 1;
 
             return ship.Quantity;
         }
-
-        public List<Ship> GetPlayerShipToDeployList(Player player, GameViewModel gameVM)
+   
+        public bool Is_ShipSunk(Player attacker)
         {
-            return player.Name == gameVM.Player1.Name ? gameVM.Player1_ShipsToDeploy : gameVM.Player2_ShipsToDeploy;
-        }
+            if (this is null)
+            {
+                throw new Exception("Ship is null");
+            }
 
+            else
+            {
+                foreach (var location in Location)
+                {
+                    if (attacker.AttackBoard[location.Row, location.Column] is null)
+                        return false;
+                }
+
+                return true;
+            }
+        }
+                public bool IsHit(Player defender, Location attackLocation)
+        {
+            return defender.OwnBoard[attackLocation.Row, attackLocation.Column] is not null;
+        }
         public Ship CreateNewShip()
         {
             switch (this)
@@ -145,7 +149,9 @@ namespace Battleship.Models
             Submarine,
             Frigate,
             Cruiser,
-            Aircraft_Carrier
+            Aircraft_Carrier,
+            Hit,
+            Miss
         } 
         
         public enum ShipState

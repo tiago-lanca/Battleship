@@ -10,7 +10,7 @@ namespace Battleship.Interfaces
     {
         void ShowAllPlayers();
         void RegisterPlayer(string name);
-        void RemovePlayer(string name);
+        //void RemovePlayer(string name);
         bool IsPlayerListEmpty();
 
     }

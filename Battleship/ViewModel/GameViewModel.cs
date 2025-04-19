@@ -1,4 +1,5 @@
-﻿using Battleship.Interfaces;
+﻿using Battleship.Controllers;
+using Battleship.Interfaces;
 using Battleship.Models;
 using Battleship.Models.ShipsType;
 using System;
@@ -12,13 +13,16 @@ namespace Battleship.ViewModel
 {
     public class GameViewModel : IGameViewModel
     {
+        #region Variables
         public Player? Player1 { get; set; }
         public List<Ship>? Player1_ShipsToDeploy { get; set; }
         public Player? Player2 { get; set; }
         public List<Ship>? Player2_ShipsToDeploy { get; set; }
 
         public string[]? GameInProgress_Players = new string[2];
-        public bool IsInProgress = false;
+        public bool GameInProgress = false;
+        public bool CombatInitiated = false;
+        #endregion
 
         public bool PlayerShipsToDeploy_Empty(Player player)
         {
@@ -69,10 +73,8 @@ namespace Battleship.ViewModel
         {
             GetPlayerShipToDeployList(player, gameVM).Remove(GetShipByType(type, player, gameVM));
         }
-        public string GetShipType_PT(Player defender, Location attackLocation)
-        {
-            Ship ship = defender.OwnBoard[attackLocation.Row, attackLocation.Column];
-
+        public string GetShipType_PT(Ship ship)
+        {     
             switch (ship)
             {
                 case Speedboat:
@@ -97,9 +99,16 @@ namespace Battleship.ViewModel
         }
         public bool IsFinished(Player defender)
         {
-            return defender.Ships.Count == 0;
+            foreach (var ship in defender.Ships)
+            {
+                if(ship.State is ShipState.Sunk)
+                    continue;
+                else
+                    return false;
+            }
+            return true;
         }
-
+        
         public bool FindPlayer_InProgressGame(string name)
         {
             if (GameInProgress_Players is not null)
@@ -112,6 +121,21 @@ namespace Battleship.ViewModel
             }
 
             return false;
+        }
+
+        /**
+         * Resets the GameViewModel data to its initial state to avoid creating a new instance.
+         */
+        public void ResetGameViewModel()
+        {
+            Player1 = null;
+            Player1_ShipsToDeploy = null;
+            Player2 = null;
+            Player2_ShipsToDeploy = null;
+            GameInProgress_Players = new string[2];
+            GameInProgress = false;
+            CombatInitiated = false;
+            
         }
     }
 }

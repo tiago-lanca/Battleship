@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Battleship.Interfaces
 {
-    interface IGameViewModel
+    public interface IGameViewModel
     {
         public bool PlayerShipsToDeploy_Empty(Player player);
         public bool AllPlayersShipsDeployed();
@@ -16,7 +16,7 @@ namespace Battleship.Interfaces
         public void RemoveShip_InPlayerList(Ship defenderShip, Player player);
         public List<Ship> GetPlayerShipToDeployList(Player player, GameViewModel gameVM);
         public void RemoveShipToDeploy(Ship.ShipType type, Player player, GameViewModel gameVM);
-        public string GetShipType_PT(Player defender, Location attackLocation);
+        public string GetShipType_PT(Ship ship);
         public Ship GetShipByType(Ship.ShipType type, Player player, GameViewModel gameVM);
         public bool IsFinished(Player defender);
         public bool FindPlayer_InProgressGame(string name);

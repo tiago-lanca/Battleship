@@ -13,3 +13,7 @@ C:\Users\tiago\source\repos\Battleship\Battleship\obj\Debug\net8.0\refint\Battle
 C:\Users\tiago\source\repos\Battleship\Battleship\obj\Debug\net8.0\Battleship.pdb
 C:\Users\tiago\source\repos\Battleship\Battleship\obj\Debug\net8.0\Battleship.genruntimeconfig.cache
 C:\Users\tiago\source\repos\Battleship\Battleship\obj\Debug\net8.0\ref\Battleship.dll
+C:\Users\tiago\source\repos\Battleship\Battleship\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\tiago\source\repos\Battleship\Battleship\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\tiago\source\repos\Battleship\Battleship\obj\Debug\net8.0\Battleship.csproj.AssemblyReference.cache
+C:\Users\tiago\source\repos\Battleship\Battleship\obj\Debug\net8.0\Battleship.csproj.Up2Date

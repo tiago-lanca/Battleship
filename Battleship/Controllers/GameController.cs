@@ -17,131 +17,50 @@ namespace Battleship.Controllers
     {
         #region Variables
 
-        public GameViewModel Game;
-        public ViewConsole view = new ViewConsole();
-        bool combatInitiated = false;
+        private readonly GameViewModel _gameVM = new GameViewModel();
+        private readonly ViewConsole view = new ViewConsole(); 
+        private readonly PlayerController _playerController;
+
+        public GameController(GameViewModel gameVM, PlayerController playerController)
+        {
+            _gameVM = gameVM;
+            _playerController = new PlayerController(gameVM);
+        }
 
         #endregion
 
         #region Functions
-        public void CheckCommand(string command, ViewConsole view, PlayerList playersList)
+        
+        public void StartGame(string player1, string player2, List<Player> playerList)
         {
-            string[] words = command.Split(' ');
-
-            switch (words[0])
+            if (_gameVM is null || !_gameVM.GameInProgress)
             {
-                case "RJ": // Register Player
-                    if (_HasRequiredInputs(words.Length, 2))
-                        playersList.RegisterPlayer(words[1]);
-                    else view.InvalidInstruction();
-                    break;
-
-                case "EJ": // Remove Player
-                    if (_HasRequiredInputs(words.Length, 2))
-                        playersList.RemovePlayer(words[1], Game);
-                    else view.InvalidInstruction();
-                    break;
-
-                case "LJ": // List Players
-                    if (_HasRequiredInputs(words.Length, 1))
-                        playersList.ShowAllPlayers();
-                    else view.InvalidInstruction();
-                    break;
-
-                case "IJ": // Initiate Game
-                    if (_HasRequiredInputs(words.Length, 3))
-                        StartGame(words[1], words[2], playersList);
-                    else view.InvalidInstruction();
-                    break;
-
-                case "IC": // Initiate Combat
-                    if (_HasRequiredInputs(words.Length, 1))
-                        InitiateCombat();
-                    else view.InvalidInstruction();
-                    break;
-
-                case "D": // Forfeit
-                    if (_HasRequiredInputs(words.Length, 2))
-                        ForfeitGame(FindPlayer(words[1]));
-                    else if (_HasRequiredInputs(words.Length, 3))
-                        ForfeitGame(FindPlayer(words[1]), FindPlayer(words[2]));
-                    else
-                        view.InvalidInstruction();
-                    break;
-
-                case "CN": // Colocar Navios
-                    if (words.Length == 5)
-                        Setup_Ship(FindPlayer(words[1]), words[2], words[3], words[4]);
-                    else if (words.Length == 6)
-                        Setup_Ship(FindPlayer(words[1]), words[2], words[3], words[4], words[5]);
-                    else
-                        view.InvalidInstruction();
-                    break;
-
-                case "RN": // Remove Ship
-                    if(_HasRequiredInputs(words.Length, 4))
-                        RemoveShip(FindPlayer(words[1]), words[2], words[3]);
-                    else
-                        view.InvalidInstruction();
-                    break;
-
-                case "T": // Execute Attack
-                    if(_HasRequiredInputs(words.Length, 4))
-                        MakeAttack(FindPlayer(words[1]), words[2], words[3]);
-                    else
-                        view.InvalidInstruction();
-                    break;
-
-                case "V": // Visualize Boards
-                    view.PrintAttackBoard(Game.Player1, Game.Player2);
-                    break;
-
-                case "XO": //Print Own Board of each player
-                    view.PrintOwnBoard(Game.Player1, Game.Player2);
-                    break;
-
-                case "Xclear": // Clear Console
-                    Console.Clear();
-                    break;
-
-                default:
-                    view.InvalidInstruction();
-                    break;
-            }
-        }
-
-        private void StartGame(string player1, string player2, PlayerList list)
-        {
-            if (Game is null || !Game.IsInProgress)
-            {
-                bool player1Exists = list.playersList.Exists(player => player.Name == player1);
-                bool player2Exists = list.playersList.Exists(player => player.Name == player2);
+                bool player1Exists = playerList.Exists(player => player.Name == player1);
+                bool player2Exists = playerList.Exists(player => player.Name == player2);
 
                 // Verifica se player 1 e player 2 estão registados
                 if (player1Exists && player2Exists)
-                {
-                    Game = new GameViewModel();
+                {                    
+                    _gameVM.Player1 = playerList.Find(player => player.Name == player1);
+                    _gameVM.Player2 = playerList.Find(player => player.Name == player2);
 
-                    Game.Player1 = list.playersList.Find(player => player.Name == player1);
-                    Game.Player2 = list.playersList.Find(player => player.Name == player2);
-
-                    Game.GameInProgress_Players[0] = player1;
-                    Game.GameInProgress_Players[1] = player2;
+                    _gameVM.GameInProgress_Players[0] = player1;
+                    _gameVM.GameInProgress_Players[1] = player2;
 
                     // Filtra alfabeticamente os jogadores para jogo
                     SortByName_GameStart(player1, player2);
 
                     view.GameStartedSortedNames(SortByName_GameStart(player1, player2));
-                    Game.IsInProgress = true;
+                    _gameVM.GameInProgress = true;
 
-                    Game.Player1.OwnBoard = new Ship[10, 10];
-                    Game.Player1.AttackBoard = new Ship[10, 10];
+                    _gameVM.Player1.OwnBoard = new Ship[10, 10];
+                    _gameVM.Player1.AttackBoard = new Ship[10, 10];
 
-                    Game.Player2.OwnBoard = new Ship[10, 10];
-                    Game.Player2.AttackBoard = new Ship[10, 10];
+                    _gameVM.Player2.OwnBoard = new Ship[10, 10];
+                    _gameVM.Player2.AttackBoard = new Ship[10, 10];
 
-                    Game.Player1_ShipsToDeploy ??= new List<Ship>();
-                    Game.Player1_ShipsToDeploy.AddRange(new List<Ship>
+                    _gameVM.Player1_ShipsToDeploy ??= new List<Ship>();
+                    _gameVM.Player1_ShipsToDeploy.AddRange(new List<Ship>
                     {
                         new Speedboat(ShipType.Speedboat, null, null, 1, "L"),
                         new Submarine(ShipType.Submarine, null, null, 1, "S"),
@@ -150,8 +69,8 @@ namespace Battleship.Controllers
                         new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, null, 1, "P")
                     });
 
-                    Game.Player2_ShipsToDeploy ??= new List<Ship>();
-                    Game.Player2_ShipsToDeploy.AddRange(new List<Ship>
+                    _gameVM.Player2_ShipsToDeploy ??= new List<Ship>();
+                    _gameVM.Player2_ShipsToDeploy.AddRange(new List<Ship>
                     {
                         new Speedboat(ShipType.Speedboat, null, null, 2, "L"),
                         new Submarine(ShipType.Submarine, null, null, 2, "S"),
@@ -168,13 +87,13 @@ namespace Battleship.Controllers
                 view.DisplayGameInProgress();
         }
 
-        private void Setup_Ship(Player player, string type, string row, string column, string orientation = null)
+        public void Setup_Ship(Player player, string type, string row, string column, string orientation = null)
         {
-            if (Game.IsInProgress)
+            if (_gameVM.GameInProgress)
             {
                 if (IsPlayerInGame(player.Name))
                 {
-                    if (!Game.PlayerShipsToDeploy_Empty(player))
+                    if (!_gameVM.PlayerShipsToDeploy_Empty(player))
                     {
                         var initLocation = new Location(GetRowCoord(row), GetColumnCoord(char.Parse(column)));
                         int remainingShips;
@@ -184,7 +103,7 @@ namespace Battleship.Controllers
                         {
                             case "L": // Speeboat
                                 var speedboat = new Speedboat();
-                                remainingShips = speedboat.GetRemainingQuantity(ShipType.Speedboat, player, Game);
+                                remainingShips = speedboat.GetRemainingQuantity(ShipType.Speedboat, player, _gameVM);
 
                                 if (remainingShips > 0)
                                 {
@@ -198,19 +117,19 @@ namespace Battleship.Controllers
                                             ShipType.Speedboat,
                                             new List<Location>(speedboat.AddLocations(initLocation)),
                                             null,
-                                            GetPlayerTeam(player),
+                                            _playerController.GetPlayerTeam(player),
                                             speedboat.Code
                                         );
 
                                         InsertShip_InPlayer_OwnBoard(playerShip, initLocation, player);
-                                        Game.AddShip_ToPlayerList(player, playerShip);
+                                        _gameVM.AddShip_ToPlayerList(player, playerShip);
                                         // Remove Quantity of ship available to deploy
-                                        playerShip.RemoveQuantityToDeploy(ShipType.Speedboat, player, Game);
+                                        playerShip.RemoveQuantityToDeploy(ShipType.Speedboat, player, _gameVM);
 
-                                        if(playerShip.GetRemainingQuantity(ShipType.Speedboat, player, Game) == 0)
+                                        if(playerShip.GetRemainingQuantity(ShipType.Speedboat, player, _gameVM) == 0)
                                         {
-                                            Ship shipToRemove = Game.GetPlayerShipToDeployList(player, Game).OfType<Speedboat>().FirstOrDefault();
-                                            Game.GetPlayerShipToDeployList(player, Game).Remove(shipToRemove);
+                                            Ship shipToRemove = _gameVM.GetPlayerShipToDeployList(player, _gameVM).OfType<Speedboat>().FirstOrDefault();
+                                            _gameVM.GetPlayerShipToDeployList(player, _gameVM).Remove(shipToRemove);
                                         }
 
                                         view.ShipDeployed_Success();
@@ -224,7 +143,7 @@ namespace Battleship.Controllers
 
                             case "S": // Submarine
                                 var submarine = new Submarine();
-                                remainingShips = submarine.GetRemainingQuantity(ShipType.Submarine, player, Game);
+                                remainingShips = submarine.GetRemainingQuantity(ShipType.Submarine, player, _gameVM);
 
                                 // Verify if there is available ships to deploy of that type
                                 if (remainingShips > 0)
@@ -239,20 +158,20 @@ namespace Battleship.Controllers
                                             ShipType.Submarine,
                                             new List<Location>(submarine.AddLocations(initLocation, orientation)),
                                             orientation,
-                                            GetPlayerTeam(player),
+                                            _playerController.GetPlayerTeam(player),
                                             submarine.Code
                                             );
 
                                         InsertShip_InPlayer_OwnBoard(playerShip, initLocation, player, orientation);
-                                        Game.AddShip_ToPlayerList(player, playerShip);
+                                        _gameVM.AddShip_ToPlayerList(player, playerShip);
 
                                         // Remove Quantity of ship available to deploy
-                                        playerShip.RemoveQuantityToDeploy(ShipType.Submarine, player, Game);
+                                        playerShip.RemoveQuantityToDeploy(ShipType.Submarine, player, _gameVM);
 
-                                        if (playerShip.GetRemainingQuantity(ShipType.Submarine, player, Game) == 0)
+                                        if (playerShip.GetRemainingQuantity(ShipType.Submarine, player, _gameVM) == 0)
                                         {
-                                            Ship shipToRemove = Game.GetPlayerShipToDeployList(player, Game).OfType<Submarine>().FirstOrDefault();
-                                            Game.GetPlayerShipToDeployList(player, Game).Remove(shipToRemove);
+                                            Ship shipToRemove = _gameVM.GetPlayerShipToDeployList(player, _gameVM).OfType<Submarine>().FirstOrDefault();
+                                            _gameVM.GetPlayerShipToDeployList(player, _gameVM).Remove(shipToRemove);
                                         }
 
 
@@ -268,7 +187,7 @@ namespace Battleship.Controllers
 
                             case "F": // Frigate
                                 var frigate = new Frigate();
-                                remainingShips = frigate.GetRemainingQuantity(ShipType.Frigate, player, Game);
+                                remainingShips = frigate.GetRemainingQuantity(ShipType.Frigate, player, _gameVM);
 
                                 // Verify if there is available ships to deploy of that type
                                 if (remainingShips > 0)
@@ -283,20 +202,20 @@ namespace Battleship.Controllers
                                             ShipType.Frigate,
                                             new List<Location>(frigate.AddLocations(initLocation, orientation)),
                                             orientation,
-                                            GetPlayerTeam(player),
+                                            _playerController.GetPlayerTeam(player),
                                             frigate.Code
                                             );
 
                                         InsertShip_InPlayer_OwnBoard(playerShip, initLocation, player, orientation);
-                                        Game.AddShip_ToPlayerList(player, playerShip);
+                                        _gameVM.AddShip_ToPlayerList(player, playerShip);
 
                                         // Remove Quantity of ship available to deploy
-                                        playerShip.RemoveQuantityToDeploy(ShipType.Frigate, player, Game);
+                                        playerShip.RemoveQuantityToDeploy(ShipType.Frigate, player, _gameVM);
 
-                                        if (playerShip.GetRemainingQuantity(ShipType.Frigate, player, Game) == 0)
+                                        if (playerShip.GetRemainingQuantity(ShipType.Frigate, player, _gameVM) == 0)
                                         {
-                                            Ship shipToRemove = Game.GetPlayerShipToDeployList(player, Game).OfType<Frigate>().FirstOrDefault();
-                                            Game.GetPlayerShipToDeployList(player, Game).Remove(shipToRemove);
+                                            Ship shipToRemove = _gameVM.GetPlayerShipToDeployList(player, _gameVM).OfType<Frigate>().FirstOrDefault();
+                                            _gameVM.GetPlayerShipToDeployList(player, _gameVM).Remove(shipToRemove);
                                         }
 
 
@@ -312,7 +231,7 @@ namespace Battleship.Controllers
 
                             case "C": // Cruiser
                                 var cruiser = new Cruiser();
-                                remainingShips = cruiser.GetRemainingQuantity(ShipType.Cruiser, player, Game);
+                                remainingShips = cruiser.GetRemainingQuantity(ShipType.Cruiser, player, _gameVM);
 
                                 // Verify if there is available ships to deploy of that type
                                 if (remainingShips > 0)
@@ -327,20 +246,20 @@ namespace Battleship.Controllers
                                             ShipType.Cruiser,
                                             new List<Location>(cruiser.AddLocations(initLocation, orientation)),
                                             orientation,
-                                            GetPlayerTeam(player),
+                                            _playerController.GetPlayerTeam(player),
                                             cruiser.Code
                                             );
 
                                         InsertShip_InPlayer_OwnBoard(playerShip, initLocation, player, orientation);
-                                        Game.AddShip_ToPlayerList(player, playerShip);
+                                        _gameVM.AddShip_ToPlayerList(player, playerShip);
 
                                         // Remove Quantity of ship available to deploy
-                                        playerShip.RemoveQuantityToDeploy(ShipType.Cruiser, player, Game);
+                                        playerShip.RemoveQuantityToDeploy(ShipType.Cruiser, player, _gameVM);
 
-                                        if (playerShip.GetRemainingQuantity(ShipType.Cruiser, player, Game) == 0)
+                                        if (playerShip.GetRemainingQuantity(ShipType.Cruiser, player, _gameVM) == 0)
                                         {
-                                            Ship shipToRemove = Game.GetPlayerShipToDeployList(player, Game).OfType<Cruiser>().FirstOrDefault();
-                                            Game.GetPlayerShipToDeployList(player, Game).Remove(shipToRemove);
+                                            Ship shipToRemove = _gameVM.GetPlayerShipToDeployList(player, _gameVM).OfType<Cruiser>().FirstOrDefault();
+                                            _gameVM.GetPlayerShipToDeployList(player, _gameVM).Remove(shipToRemove);
                                         }
 
 
@@ -356,7 +275,7 @@ namespace Battleship.Controllers
 
                             case "P": // Aircraft_Carrier
                                 var aircraft_carrier = new Aircraft_Carrier();
-                                remainingShips = aircraft_carrier.GetRemainingQuantity(ShipType.Aircraft_Carrier, player, Game);
+                                remainingShips = aircraft_carrier.GetRemainingQuantity(ShipType.Aircraft_Carrier, player, _gameVM);
 
                                 // Verify if there is available ships to deploy of that type
                                 if (remainingShips > 0)
@@ -371,20 +290,20 @@ namespace Battleship.Controllers
                                             ShipType.Aircraft_Carrier,
                                             new List<Location>(aircraft_carrier.AddLocations(initLocation, orientation)),
                                             orientation,
-                                            GetPlayerTeam(player),
+                                            _playerController.GetPlayerTeam(player),
                                             aircraft_carrier.Code
                                             );
 
                                         InsertShip_InPlayer_OwnBoard(playerShip, initLocation, player, orientation);
-                                        Game.AddShip_ToPlayerList(player, playerShip);
+                                        _gameVM.AddShip_ToPlayerList(player, playerShip);
 
                                         // Remove Quantity of ship available to deploy
-                                        playerShip.RemoveQuantityToDeploy(ShipType.Aircraft_Carrier, player, Game);
+                                        playerShip.RemoveQuantityToDeploy(ShipType.Aircraft_Carrier, player, _gameVM);
 
-                                        if (playerShip.GetRemainingQuantity(ShipType.Aircraft_Carrier, player, Game) == 0)
+                                        if (playerShip.GetRemainingQuantity(ShipType.Aircraft_Carrier, player, _gameVM) == 0)
                                         {
-                                            Ship shipToRemove = Game.GetPlayerShipToDeployList(player, Game).OfType<Aircraft_Carrier>().FirstOrDefault();
-                                            Game.GetPlayerShipToDeployList(player, Game).Remove(shipToRemove);
+                                            Ship shipToRemove = _gameVM.GetPlayerShipToDeployList(player, _gameVM).OfType<Aircraft_Carrier>().FirstOrDefault();
+                                            _gameVM.GetPlayerShipToDeployList(player, _gameVM).Remove(shipToRemove);
                                         }
 
 
@@ -415,43 +334,43 @@ namespace Battleship.Controllers
                 case "E":
                     for (int i = 0; i < ship.Size; i++)
                     {
-                        player.OwnBoard[initLocation.Row, initLocation.Column + i] = ship;
+                        player.OwnBoard[initLocation.Row, initLocation.Column + i] = ship.CloneShip();
                     }
                     break;
 
                 case "N":
                     for (int i = 0; i < ship.Size; i++)
                     {
-                        player.OwnBoard[initLocation.Row - i, initLocation.Column] = ship;
+                        player.OwnBoard[initLocation.Row - i, initLocation.Column] = ship.CloneShip();
                     }
                     break;
 
                 case "S":
                     for (int i = 0; i < ship.Size; i++)
                     {
-                        player.OwnBoard[initLocation.Row + i, initLocation.Column] = ship;
+                        player.OwnBoard[initLocation.Row + i, initLocation.Column] = ship.CloneShip();
                     }
                     break;
 
                 case "O":
                     for (int i = 0; i < ship.Size; i++)
                     {
-                        player.OwnBoard[initLocation.Row, initLocation.Column - i] = ship;
+                        player.OwnBoard[initLocation.Row, initLocation.Column - i] = ship.CloneShip();
                     }
                     break;
 
                 case null:
-                    player.OwnBoard[initLocation.Row, initLocation.Column] = ship;
+                    player.OwnBoard[initLocation.Row, initLocation.Column] = ship.CloneShip();
                     break;
             }
         }
-        private void RemoveShip(Player player, string row, string column)
+        public void RemoveShip(Player player, string row, string column)
         {
             var initLocation = new Location(GetRowCoord(row), GetColumnCoord(char.Parse(column)));
 
-            if (Game.IsInProgress)
+            if (_gameVM.GameInProgress)
             {
-                if (!combatInitiated)
+                if (!_gameVM.CombatInitiated)
                 {
                     if(IsPlayerInGame(player.Name))
                     {
@@ -465,10 +384,10 @@ namespace Battleship.Controllers
                             }
 
 
-                            if (Game.GetPlayerShipToDeployList(player, Game).Find(s => s.Type == ship.Type) is null)
+                            if (_gameVM.GetPlayerShipToDeployList(player, _gameVM).Find(s => s.Type == ship.Type) is null)
                             {
                                 Ship newship = ship.CreateNewShip();
-                                Game.GetPlayerShipToDeployList(player, Game).Add(ship);                                
+                                _gameVM.GetPlayerShipToDeployList(player, _gameVM).Add(ship);                                
                             }
 
                             view.DisplayShipRemovedSuccess();
@@ -486,14 +405,14 @@ namespace Battleship.Controllers
             else
                 view.DisplayGameNotInProgress();
         }
-        private void InitiateCombat()
+        public void InitiateCombat()
         {
-            if (Game.IsInProgress)
+            if (_gameVM.GameInProgress)
             {
-                if (Game.AllPlayersShipsDeployed())
+                if (_gameVM.AllPlayersShipsDeployed())
                 {
                     view.DisplayCombatInitiate();
-                    combatInitiated = true;
+                    _gameVM.CombatInitiated = true;
                 }
                 else
                 {
@@ -505,54 +424,61 @@ namespace Battleship.Controllers
                 view.DisplayGameNotInProgress(); 
             }
         }
-        private void MakeAttack(Player player, string row, string column) 
+        public void MakeAttack(Player player, string row, string column) 
         {
-            if (Game.IsInProgress)
+            if (_gameVM.GameInProgress)
             {
-                if (combatInitiated)
+                if (_gameVM.CombatInitiated)
                 {
                     if (IsPlayerInGame(player.Name))
                     {
-                        Location attackLocation = new Location(GetRowCoord(row), GetColumnCoord(char.Parse(column)));
+                        Location attackLocation = new Location(
+                            GetRowCoord(row), 
+                            GetColumnCoord(char.Parse(column))
+                        );
 
+                        // Verify if the attack location is valid
                         if (IsInLimits(attackLocation.Row, attackLocation.Column))
                         {
                             Player attacker = player;
-                            Player defender = Game.Player1.Name == player.Name ? Game.Player2 : Game.Player1;
+                            Player? defender = _gameVM.Player1?.Name == player.Name ? _gameVM.Player2 : _gameVM.Player1;
                             Ship defenderShip = defender.OwnBoard[attackLocation.Row, attackLocation.Column];
 
-                            // No ship in attack location
-                            if (defenderShip.IsHit(defender, attackLocation))
+                            // Verify if the attack location has Ship
+                            if (defenderShip is not null && defenderShip.IsHit(defender, attackLocation))
                             {
+                                
                                 attacker.Shots++;
                                 attacker.ShotsOnTargets++;
-                                attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Hit, null, null, GetPlayerTeam(attacker), "X");
+                                attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Hit, null, null, _playerController.GetPlayerTeam(attacker), "X");
                                 
+                                defenderShip.ChangeShipState(attackLocation, defender);
+
                                 // Verify if the ship is sunk
-                                if(defenderShip.Is_ShipSunk(attacker))
+                                if (defenderShip.Is_ShipSunk(defender))
                                 {
                                     attacker.EnemySunkShips++;
-                                    view.DisplaySunkShip(defender, attackLocation, Game);
-                                    Game.RemoveShip_InPlayerList(defenderShip, defender);
-
-                                    if (Game.IsFinished(defender))
+                                    view.DisplaySunkShip(defenderShip, _gameVM);
+                                    //_gameVM.RemoveShip_InPlayerList(defenderShip, defender);
+                                    //defenderShip.State = ShipState.Sunk;
+                                    if (_gameVM.IsFinished(defender))
                                     {
-                                        AddStatsToPlayers(attacker, defender);
+                                        _playerController.AddStatsToPlayers(attacker, defender);
 
-                                        ResetGame();
+                                        _gameVM.ResetGameViewModel();
+                                        _playerController.ResetInGameStats(attacker);
+                                        _playerController.ResetInGameStats(defender);
                                         view.GameFinished();
                                     }
                                 }
                                 else
-                                {
-                                    view.DisplayShipHit(defender, attackLocation, Game);
-                                }
+                                    view.DisplayShipHit(defenderShip, _gameVM);
                             }
 
                             else
                             {
                                 attacker.Shots++;
-                                attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Miss, null, null, GetPlayerTeam(attacker), "*");
+                                attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Miss, null, null, _playerController.GetPlayerTeam(attacker), "*");
                                 Console.WriteLine("Tiro na água.\n");
                             }
                         }
@@ -694,19 +620,17 @@ namespace Battleship.Controllers
             }
             
         }
-        
-        private void ForfeitGame(Player player1, Player player2 = null)
+
+        public void ForfeitGame(Player player1, Player player2 = null)
         {
             if (player2 is null)
             {
                 Player playerLoss = player1;
-                Player playerWin = Game.Player1.Name == player1.Name ? Game.Player2 : Game.Player1;
+                Player playerWin = _gameVM.Player1.Name == player1.Name ? _gameVM.Player2 : _gameVM.Player1;
                 
-
                 playerWin.NumGames++;
                 playerWin.NumVictory++;
                 playerLoss.NumGames++;
-
                 
             }
             else
@@ -714,12 +638,21 @@ namespace Battleship.Controllers
                 player1.NumGames++;
                 player2.NumGames++;
             }
-            
-            Game = null;
+
+
+            _gameVM.ResetGameViewModel();
+            //_playerController.UpdateGameViewModel(_gameVM);
+            //_playerController.UpdateGameViewModel(_gameVM);
             Console.WriteLine("Desistência com sucesso. Jogo terminado.\n");
-
-
         }
+
+        /**
+          * Verifies if the positions around the given position are empty
+          * @param player
+          * @param row
+          * @param column
+          * @return true if the positions are empty, false otherwise
+          */
         public bool IsEmptyAround(Player player, int row, int column)
         {
             // Check positions around
@@ -747,51 +680,60 @@ namespace Battleship.Controllers
             return true;
         }
 
-        public bool IsInLimits(int row, int column)
-        {
-            return row >= 0 && row < 10 && column >= 0 && column < 10;
-        }
+        public bool IsInLimits(int row, int column) => 
+            row >= 0 && row < 10 && column >= 0 && column < 10;
+                
+        public bool IsInRowLimits(int row) =>
+            row >= 0 && row < 10;
         
-        public bool IsInRowLimits(int row)
-        {
-            return row >= 0 && row < 10;
-        }
-
-        public bool IsInColumnLimits(int column)
-        {
-            return column >= 0 && column < 10;
-        }
+        public bool IsInColumnLimits(int column) =>
+            column >= 0 && column < 10;
 
         /*public bool IsEmptySpace(Player player, int row, int column)
         {
             return player.OwnBoard[row, column] is null;
         }*/
 
-        public bool _HasRequiredInputs(int nr_inputs, int nr_reqInputs)
-        {
-            return nr_inputs == nr_reqInputs;
-        }
+        /**
+         * Verifies if the number of inputs is correct
+         * @param nr_inputs
+         * @param nr_reqInputs
+         * @return true if the number of inputs is correct, false otherwise
+         */
+        
 
+        /**
+         * Sorts the players by name
+         * @param player1
+         * @param player2
+         * @return sortedNames
+         */
         public string[] SortByName_GameStart(string player1, string player2)
         {
             string[] sortedNames = new string[2];
 
             if (player1.ToUpper()[0] < player2.ToUpper()[0])
             {
-                sortedNames[0] = Game.Player1.Name;
-                sortedNames[1] = Game.Player2.Name;
+                sortedNames[0] = _gameVM.Player1.Name;
+                sortedNames[1] = _gameVM.Player2.Name;
             }
             else
             {
-                sortedNames[0] = Game.Player2.Name;
-                sortedNames[1] = Game.Player1.Name;
+                sortedNames[0] = _gameVM.Player2.Name;
+                sortedNames[1] = _gameVM.Player1.Name;
             }
 
             return sortedNames;
         }
+
+        /**
+         * Verifies if the player is in the game
+         * @param playerName
+         * @return true if player is in game, false otherwise
+         */
         public bool IsPlayerInGame(string playerName)
         {
-            foreach(string name in Game.GameInProgress_Players)
+            foreach(string name in _gameVM.GameInProgress_Players)
             {
                 if(name == playerName) return true;
             }
@@ -799,37 +741,28 @@ namespace Battleship.Controllers
             return false;
         }
 
-        public Player FindPlayer(string name)
-        {
-            return Game.Player1.Name == name ? Game.Player1 : Game.Player2;
-        }
-
-        private void AddStatsToPlayers(Player attacker, Player defender)
-        {
-            attacker.NumVictory++;
-            attacker.NumGames++;
-            defender.NumGames++;
-        }
-
-        private void ResetGame()
-        {
-            Game = null;
-            combatInitiated = false;
-        }
+        
+        /**
+         * Gets the row coordinate from the string
+         * @param y
+         * @return int
+         */
         public int GetRowCoord(string y)
         {
             return int.Parse(y) - 1;
         }
 
+        /**
+         * Gets the column coordinate from the int
+         * @param x
+         * @return int
+         */
         public int GetColumnCoord(int x)
         {
             return x - 'A';
         }
 
-        public int GetPlayerTeam(Player player)
-        {
-            return player.Name == Game.GameInProgress_Players[0] ? 1 : 2;
-        }
+        
 
         #endregion
     }

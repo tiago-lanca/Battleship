@@ -17,8 +17,8 @@ namespace Battleship.Models.ShipsType
         public override int Quantity { get; set; } = 3;
 
         public Submarine() { }
-        public Submarine(ShipType type, List<Location> location, string direction, int team, string placeholder)
-            : base(type, location, direction, team, placeholder)
+        public Submarine(ShipType type, List<Location> location, string direction, int team, string placeholder, ShipState state = ShipState.Alive)
+            : base(type, location, direction, team, placeholder, state)
         {
 
         }

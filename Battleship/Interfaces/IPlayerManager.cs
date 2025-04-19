@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Battleship.Interfaces
 {
-    public interface IPlayerList
+    public interface IPlayerManager
     {
         void ShowAllPlayers();
         void RegisterPlayer(string name);

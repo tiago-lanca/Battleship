@@ -248,14 +248,14 @@ namespace Battleship.Views
         {
             Console.WriteLine("Jogo em curso sem combate iniciado.\n");
         }
-        public void DisplaySunkShip(Player defender, Location attackLocation, GameViewModel gameVM)
+        public void DisplaySunkShip(Ship ship, GameViewModel gameVM)
         {
-            Console.WriteLine($"Navio {gameVM.GetShipType_PT(defender, attackLocation)} afundado.\n");
+            Console.WriteLine($"Navio {gameVM.GetShipType_PT(ship)} afundado.\n");
         }
 
-        public void DisplayShipHit(Player defender, Location attackLocation, GameViewModel gameVM)
+        public void DisplayShipHit(Ship ship, GameViewModel gameVM)
         {
-            Console.WriteLine($"Navio {gameVM.GetShipType_PT(defender, attackLocation)} acertado.\n");
+            Console.WriteLine($"Navio {gameVM.GetShipType_PT(ship)} acertado.\n");
         }
         public void GameFinished()
         {

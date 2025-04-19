@@ -1,6 +1,8 @@
 ﻿using Battleship.Controllers;
 using Battleship.Models;
+using Battleship.ViewModel;
 using Battleship.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Battleship
 {
@@ -8,9 +10,25 @@ namespace Battleship
     {
         static void Main(string[] args)
         {
-            PlayerList playersList = new PlayerList();
+            /*var services = new ServiceCollection();
+            // Registering the services of dependency injection
+            services.AddSingleton<GameViewModel>();
+            services.AddSingleton<PlayerController>();
+            services.AddSingleton<GameController>();
+            services.AddSingleton<CommandController>();
+            services.AddSingleton<ViewConsole>();
+
+            var serviceProvider = services.BuildServiceProvider();
+            // Registering the services
+            var commandController = serviceProvider.GetRequiredService<CommandController>();
+            var view = serviceProvider.GetRequiredService<ViewConsole>();*/
+
+            // Creating the objects manually for dependency injection purposes
             ViewConsole view = new ViewConsole();
-            GameController controller = new GameController();
+            GameViewModel gameVM = new GameViewModel();
+            PlayerController playerController = new PlayerController(gameVM);
+            GameController gameController = new GameController(gameVM, playerController);
+            CommandController commandController = new CommandController(gameVM, gameController, playerController);
             string command;
 
             // Executing automated inputs for testing 
@@ -31,16 +49,17 @@ namespace Battleship
             while (automatedInputs < 51 && (command = view.GetCommand()) != null)  
             {                
                 Console.WriteLine($"{command}");
-                controller.CheckCommand(command, view, playersList);
+                commandController.CheckCommand(command);
                 automatedInputs++;
             }
             Console.SetIn(new StreamReader(Console.OpenStandardInput()));
             // ------------------------------------------------------  //
+                            // Stops the automated inputs //
 
             do
             {
                 command = view.GetCommand();
-                controller.CheckCommand(command, view, playersList);
+                commandController.CheckCommand(command);
             }
             while (!string.IsNullOrWhiteSpace(command));
 

@@ -61,7 +61,7 @@ namespace Battleship.Models
             }
 
             playerList.Remove(player);
-            view.PlayerRemoved();
+            //view.PlayerRemoved();
         }
 
         

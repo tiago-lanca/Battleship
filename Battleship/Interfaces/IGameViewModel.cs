@@ -14,7 +14,7 @@ namespace Battleship.Interfaces
         public bool AllPlayersShipsDeployed();
         public void AddShip_ToPlayerList(Player player, Ship ship);
         public void RemoveShip_InPlayerList(Ship defenderShip, Player player);
-        public List<Ship> GetPlayerShipToDeployList(Player player, GameViewModel gameVM);
+        public List<Ship> GetPlayerShipToDeployList(Player player);
         public void RemoveShipToDeploy(Ship.ShipType type, Player player, GameViewModel gameVM);
         public string GetShipType_PT(Ship ship);
         public Ship GetShipByType(Ship.ShipType type, Player player, GameViewModel gameVM);

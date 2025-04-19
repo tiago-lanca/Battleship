@@ -11,8 +11,8 @@ namespace Battleship.Interfaces
 {
     public interface IShip<T>
     {
-        public int GetRemainingQuantity(T type, Player player, GameViewModel gameVM);
-        public int RemoveQuantityToDeploy(T type, Player player, GameViewModel gameVM);
+        public int GetRemainingQuantity(List<T> playerShipToDeployList);
+        public void RemoveQuantityToDeploy(List<T> playerShipToDeployList);
         public List<Location> AddLocations(Location initLocation, string orientation = null);
         public bool Is_ShipSunk(Player attacker);
         

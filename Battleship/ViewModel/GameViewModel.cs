@@ -19,6 +19,8 @@ namespace Battleship.ViewModel
         public Player? Player2 { get; set; }
         public List<Ship>? Player2_ShipsToDeploy { get; set; }
 
+        public bool Turn = true; // true = Player1, false = Player2
+        public bool FirstShot = true;
         public string[]? GameInProgress_Players = new string[2];
         public bool GameInProgress = false;
         public bool CombatInitiated = false;
@@ -64,14 +66,14 @@ namespace Battleship.ViewModel
                 Console.WriteLine(e.Message);
             }
         }
-        public List<Ship> GetPlayerShipToDeployList(Player player, GameViewModel gameVM)
+        public List<Ship> GetPlayerShipToDeployList(Player player)
         {
-            return player.Name == gameVM.Player1.Name ? gameVM.Player1_ShipsToDeploy : gameVM.Player2_ShipsToDeploy;
+            return player.Name == Player1.Name ? Player1_ShipsToDeploy : Player2_ShipsToDeploy;
         }
         
         public void RemoveShipToDeploy(ShipType type, Player player, GameViewModel gameVM)
         {
-            GetPlayerShipToDeployList(player, gameVM).Remove(GetShipByType(type, player, gameVM));
+            GetPlayerShipToDeployList(player).Remove(GetShipByType(type, player, gameVM));
         }
         public string GetShipType_PT(Ship ship)
         {     
@@ -93,7 +95,7 @@ namespace Battleship.ViewModel
         }
         public Ship GetShipByType(ShipType type, Player player, GameViewModel gameVM)
         {
-            List<Ship> shipList = GetPlayerShipToDeployList(player, gameVM);
+            List<Ship> shipList = GetPlayerShipToDeployList(player);
 
             return shipList.FirstOrDefault(ship => ship.Type == type);
         }
@@ -135,7 +137,21 @@ namespace Battleship.ViewModel
             GameInProgress_Players = new string[2];
             GameInProgress = false;
             CombatInitiated = false;
+            FirstShot = true;
             
         }
+
+        public void ManageTurn(Player player)
+        {
+            if (FirstShot)
+            {
+                // Defining turn based on the player who started the game
+                FirstShot = false;
+                Turn = GameInProgress_Players[0] == player.Name ? true : false;
+            }
+            else ChangeTurn();
+        }
+
+        public void ChangeTurn() => Turn = !Turn;
     }
 }

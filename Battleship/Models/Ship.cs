@@ -14,7 +14,7 @@ using static Battleship.Models.Ship;
 
 namespace Battleship.Models
 {
-    public class Ship : IShip<ShipType>
+    public class Ship : IShip<Ship>
     {
         #region Variables
         public ShipType Type { get; set; }
@@ -39,24 +39,29 @@ namespace Battleship.Models
             State = state;
         }
 
-        
-        public int GetRemainingQuantity(ShipType type, Player player, GameViewModel gameVM)
+        /**
+         * Check if the ship (quantity) type is already deployed on the board
+         * @param playerShipToDeployList , the playerList of ships available to deploy
+         * @return the number of ships's type remaining to deploy
+         */
+        public int GetRemainingQuantity(List<Ship> playerShipToDeployList) =>            
+            playerShipToDeployList.FirstOrDefault(ship => ship.Type == Type).Quantity;
+
+        /**
+         * Remove the quantity of ship (type) to deploy
+         * @param type , the type of ship to remove
+         * @param player , the player who owns the ship to remove on OwnBoard
+         * @return the number of ships's type remaining to deploy
+         */
+        public void RemoveQuantityToDeploy(List<Ship> playerShipToDeployList)
         {
-            List<Ship> shipsToDeploy = gameVM.GetPlayerShipToDeployList(player, gameVM);
+            Ship ship = playerShipToDeployList.FirstOrDefault(ship => ship.Type == Type);
+            // Remove the quantity of ship to deploy
+            ship.Quantity--;
 
-            Ship ship = shipsToDeploy.FirstOrDefault(ship => ship.Type == type);
-
-            return ship.Quantity;
-        }
-
-        public int RemoveQuantityToDeploy(ShipType type, Player player, GameViewModel gameVM)
-        {
-            List<Ship> shipsToDeploy = gameVM.GetPlayerShipToDeployList(player, gameVM);
-
-            Ship ship = shipsToDeploy.FirstOrDefault(ship => ship.Type == type);
-            ship.Quantity -= 1;
-
-            return ship.Quantity;
+            // Check if the quantity of ship to deploy is 0, if so remove it from the list of ships to deploy
+            if (ship.Quantity == 0)
+                playerShipToDeployList.Remove(ship);            
         }
    
         public bool Is_ShipSunk(Player defender)
@@ -88,27 +93,17 @@ namespace Battleship.Models
             defender.OwnBoard[attackLocation.Row, attackLocation.Column] is not null;
 
         // Create a new ship based on the type of the ship
-        public Ship CreateNewShip()
+        public Ship? CreateNewShip()
         {
-            switch (this)
+            return this switch
             {
-                case Speedboat:
-                    return new Speedboat();
-
-                case Submarine:
-                    return new Submarine();
-
-                case Frigate:
-                    return new Frigate();
-
-                case Cruiser:
-                    return new Cruiser();
-
-                case Aircraft_Carrier:
-                    return new Aircraft_Carrier();
-            }
-
-            return null;
+                Speedboat => new Speedboat(),
+                Submarine => new Submarine(),
+                Frigate => new Frigate(),
+                Cruiser => new Cruiser(),
+                Aircraft_Carrier => new Aircraft_Carrier(),
+                _ => null,
+            };
         }
 
         public void ChangeShipState(Location attackLocation, Player player)
@@ -163,6 +158,17 @@ namespace Battleship.Models
             return locations;
         }
 
+        /**
+         * Remove the ship from the OwnBoard of the given player
+         * @param player , is the player who owns the ship to remove on OwnBoard
+         */
+        public void RemoveOnBoard(Player player)
+        {
+            foreach (var location in this.Location)
+                player.OwnBoard[location.Row, location.Column] = null;
+        }
+            
+        
         public Ship CloneShip()
         {
             return this switch

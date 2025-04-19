@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Battleship.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,21 @@ namespace Battleship.Models
             Name = name;
             NumGames = 0;
             NumVictory = 0;
+        }
+
+        /**
+         * Verifies if the player is in the game
+         * @param playerName
+         * @return true if player is in game, false otherwise
+         */
+        public bool IsInGame(GameViewModel gameVM)
+        {
+            foreach (string name in gameVM.GameInProgress_Players)
+            {
+                if (name == Name) return true;
+            }
+
+            return false;
         }
 
         public override string ToString()

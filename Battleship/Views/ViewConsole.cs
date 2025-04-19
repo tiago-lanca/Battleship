@@ -3,6 +3,7 @@ using Battleship.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace Battleship.Views
 {
     public class ViewConsole
     {
+        Board boardOutline = new Board();
         public string GetCommand()
         {
             return Console.ReadLine()!;
@@ -18,7 +20,7 @@ namespace Battleship.Views
         {
             Console.WriteLine("Instrução inválida.\n");
         }
-        public void ShowAllPlayers(Player player)
+        public void ShowPlayerInfo(Player player)
         {
             Console.WriteLine(player);
         }
@@ -35,7 +37,12 @@ namespace Battleship.Views
 
         public void PlayerNotFound() 
         { 
-            Console.WriteLine("Jogador inexistente.\n"); 
+            Console.WriteLine("Jogador inexistente.\n");
+        }
+
+        public void DisplayPlayerNotTurn()
+        {
+            Console.WriteLine("Não é a vez do jogador.\n");
         }
 
         public void PlayerRegistered()
@@ -53,20 +60,21 @@ namespace Battleship.Views
             Console.WriteLine($"Jogo iniciado entre {players[0]} e {players[1]}.\n");
         }
 
-        public void PrintAttackBoard(Player player1, Player player2)
+        public void PrintAttackBoard(Player player)
         {
-            Board boardOutline = new Board();
-
-            // PLAYER 1
-            Console.WriteLine($"Nome: {player1.Name} Tiros: {player1.Shots} TirosEmNavios: {player1.ShotsOnTargets}" +
-                                    $" NaviosAfundados: {player1.EnemySunkShips}\n");
+            // Print stats of the player
+            Console.WriteLine($"Nome: {player.Name} Tiros: {player.Shots} TirosEmNavios: {player.ShotsOnTargets}" +
+                                    $" NaviosAfundados: {player.EnemySunkShips}\n");
             Console.Write("   ");
+
+            // Print letters
             foreach (char letter in boardOutline.letters)
             {
                 Console.Write($" {letter}");
             }
             Console.WriteLine("");
 
+            // Print numbers and attack board with each ship deployed
             for (int line = 0; line < boardOutline.numbers.Length; line++)
             {
                 if (line != 9)
@@ -76,39 +84,8 @@ namespace Battleship.Views
 
                 for (int col = 0; col < boardOutline.letters.Length; col++)
                 {
-                    if (player1.AttackBoard[line, col] != null)
-                        Console.Write(player1.AttackBoard[line, col].Placeholder);
-                    else
-                        Console.Write(" ");
-
-                    Console.Write(" ");
-                }
-                Console.WriteLine("");
-            }
-            Console.WriteLine("");
-
-
-            // PLAYER 2
-            Console.WriteLine($"Nome: {player2.Name} Tiros: {player2.Shots} TirosEmNavios: {player2.ShotsOnTargets}" +
-                                    $" NaviosAfundados: {player2.EnemySunkShips}\n");
-            Console.Write("   ");
-            foreach (char letter in boardOutline.letters)
-            {
-                Console.Write($" {letter}");
-            }
-            Console.WriteLine("");
-
-            for (int line = 0; line < boardOutline.numbers.Length; line++)
-            {
-                if (line != 9)
-                    Console.Write($" {boardOutline.numbers[line]}  ");
-                else
-                    Console.Write($"{boardOutline.numbers[line]}  ");
-
-                for (int col = 0; col < boardOutline.letters.Length; col++)
-                {
-                    if (player2.AttackBoard[line, col] != null)
-                        Console.Write(player2.AttackBoard[line, col].Placeholder);
+                    if (player.AttackBoard[line, col] != null)
+                        Console.Write(player.AttackBoard[line, col].Placeholder);
                     else
                         Console.Write(" ");
 
@@ -119,20 +96,21 @@ namespace Battleship.Views
             Console.WriteLine("");
         }
 
-        public void PrintOwnBoard(Player player1, Player player2)
+        public void PrintOwnBoard(Player player)
         {
-            Board boardOutline = new Board();
-
-            // PLAYER 1
-            Console.WriteLine($"Nome: {player1.Name} Tiros: {player1.Shots} TirosEmNavios: {player1.ShotsOnTargets}" +
-                                    $" NaviosAfundados: {player1.EnemySunkShips}\n");
+            // Print stats of the player
+            Console.WriteLine($"Nome: {player.Name} Tiros: {player.Shots} TirosEmNavios: {player.ShotsOnTargets}" +
+                                    $" NaviosAfundados: {player.EnemySunkShips}\n");
             Console.Write("   ");
+
+            // Print letters
             foreach (char letter in boardOutline.letters)
             {
                 Console.Write($" {letter}");
             }
             Console.WriteLine("");
 
+            // Print numbers and attack board with each ship deployed
             for (int line = 0; line < boardOutline.numbers.Length; line++)
             {
                 if(line != 9)
@@ -142,39 +120,8 @@ namespace Battleship.Views
 
                 for (int col = 0; col < boardOutline.letters.Length; col++)
                 {
-                    if (player1.OwnBoard[line, col] != null)
-                        Console.Write(player1.OwnBoard[line, col].Placeholder);
-                    else
-                        Console.Write(" ");
-
-                    Console.Write(" ");
-                }
-                Console.WriteLine("");
-            }
-            Console.WriteLine("");
-
-
-            // PLAYER 2
-            Console.WriteLine($"Nome: {player2.Name} Tiros: {player2.Shots} TirosEmNavios: {player2.ShotsOnTargets}" +
-                                    $" NaviosAfundados: {player2.EnemySunkShips}\n");
-            Console.Write("   ");
-            foreach (char letter in boardOutline.letters)
-            {
-                Console.Write($" {letter}");
-            }
-            Console.WriteLine("");
-
-            for (int line = 0; line < boardOutline.numbers.Length; line++)
-            {
-                if (line != 9)
-                    Console.Write($" {boardOutline.numbers[line]}  ");
-                else
-                    Console.Write($"{boardOutline.numbers[line]}  ");
-
-                for (int col = 0; col < boardOutline.letters.Length; col++)
-                {
-                    if (player2.OwnBoard[line, col] != null)
-                        Console.Write(player2.OwnBoard[line, col].Placeholder);
+                    if (player.OwnBoard[line, col] != null)
+                        Console.Write(player.OwnBoard[line, col].Placeholder);
                     else
                         Console.Write(" ");
 
@@ -255,11 +202,11 @@ namespace Battleship.Views
 
         public void DisplayShipHit(Ship ship, GameViewModel gameVM)
         {
-            Console.WriteLine($"Navio {gameVM.GetShipType_PT(ship)} acertado.\n");
+            Console.WriteLine($"Tiro em navio {gameVM.GetShipType_PT(ship)}.\n");
         }
-        public void GameFinished()
+        public void ShipSunk_GameFinished(Ship ship, GameViewModel gameVM)
         {
-            Console.WriteLine("Jogo terminado.\n");
+            Console.WriteLine($"Navio {gameVM.GetShipType_PT(ship)} afundado. Jogo terminado.\n");
         }
         public void DisplayPlayerInProgressGame()
         {

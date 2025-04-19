@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Battleship.Controllers
 {
-    public class PlayerController : IPlayerManager
+    public class PlayerController
     {
-        public List<Player> playerList { get; set; } = new List<Player>();
+        
         private readonly GameViewModel _gameVM;
         private readonly ViewConsole view = new ViewConsole();
 
@@ -21,57 +21,7 @@ namespace Battleship.Controllers
             _gameVM = gameVM;
         }
 
-        public void RegisterPlayer(string name)
-        {
-            if (!playerList.Exists(player => player.Name == name))
-            {
-                Player newPlayer = new Player(name);
-                playerList.Add(newPlayer);
-                view.PlayerRegistered();
-            }
-
-            else
-                view.PlayerAlreadyExists();
-        }
-
-        public void RemovePlayer(string name)
-        {
-            Player player = playerList.Find(player => player.Name == name);
-
-            if (player is null)
-            {
-                view.PlayerNotFound();
-                return;
-            }
-
-            if (_gameVM.FindPlayer_InProgressGame(name))
-            {
-                view.DisplayPlayerInProgressGame();
-                return;
-            }
-
-            playerList.Remove(player);
-            view.PlayerRemoved();
-        }
-
-        public void ShowAllPlayers()
-        {
-            if (IsPlayerListEmpty())
-                view.PlayerListEmpty();
-
-            else
-            {
-                playerList = playerList.OrderByDescending(player => player.Name).ToList();
-
-                foreach (Player player in playerList)
-                {
-                    view.ShowAllPlayers(player);
-                }
-            }
-        }
-
-        public bool IsPlayerListEmpty() { return playerList.Count == 0; }
-
+        
 
         /**
          * Finds the player by name
@@ -95,6 +45,11 @@ namespace Battleship.Controllers
             return player.Name == _gameVM.GameInProgress_Players[0] ? 1 : 2;
         }
 
+        public bool CheckTurn(Player player)
+        {
+            return player.Name == _gameVM.GameInProgress_Players[GetTurn(_gameVM.Turn)];
+        }
+
         /**
          * Adds stats to players, number of victories and number of games
          * @param attacker
@@ -107,6 +62,7 @@ namespace Battleship.Controllers
             defender.NumGames++;
         }
 
+
         public void ResetInGameStats(Player player)
         {
             player.Ships.Clear();
@@ -117,5 +73,6 @@ namespace Battleship.Controllers
             player.EnemySunkShips = 0;
         }
 
+        public int GetTurn(bool turn) => Convert.ToInt16(turn);
     }
 }

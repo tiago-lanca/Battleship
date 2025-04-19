@@ -1,4 +1,5 @@
-﻿using Battleship.ViewModel;
+﻿using Battleship.Interfaces;
+using Battleship.ViewModel;
 using Battleship.Views;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,15 @@ namespace Battleship.Controllers
     {
         private readonly ViewConsole view = new ViewConsole();
         private GameViewModel _gameVM;
+        private readonly IPlayerList _playerList;
         private readonly GameController _gameController;
         private readonly PlayerController _playerController;
-        public CommandController(GameViewModel gameVM, GameController gameController, PlayerController playerController) 
+        public CommandController(GameViewModel gameVM, GameController gameController, PlayerController playerController, IPlayerList playerList) 
         { 
             _gameVM = gameVM;
             _gameController = gameController;
             _playerController = playerController;
+            _playerList = playerList;
         }
 
         public void CheckCommand(string command)
@@ -29,25 +32,25 @@ namespace Battleship.Controllers
             {
                 case "RJ": // Register Player
                     if (_HasRequiredInputs(words.Length, 2))
-                        _playerController.RegisterPlayer(words[1]);
+                        _playerList.RegisterPlayer(words[1]);
                     else view.InvalidInstruction();
                     break;
 
                 case "EJ": // Remove Player
                     if (_HasRequiredInputs(words.Length, 2))
-                        _playerController.RemovePlayer(words[1]);
+                        _playerList.RemovePlayer(words[1], _gameVM);
                     else view.InvalidInstruction();
                     break;
 
                 case "LJ": // List Players
                     if (_HasRequiredInputs(words.Length, 1))
-                        _playerController.ShowAllPlayers();
+                        _playerList.ShowAllPlayers();
                     else view.InvalidInstruction();
                     break;
 
                 case "IJ": // Initiate Game
                     if (_HasRequiredInputs(words.Length, 3))
-                        _gameController.StartGame(words[1], words[2], _playerController.playerList);
+                        _gameController.StartGame(words[1], words[2], _playerList.GetPlayerList());
                     else view.InvalidInstruction();
                     break;
 
@@ -94,7 +97,10 @@ namespace Battleship.Controllers
                     if (_gameVM.GameInProgress)
                     {
                         if (_gameVM.CombatInitiated)
-                            view.PrintAttackBoard(_gameVM.Player1, _gameVM.Player2);
+                        {
+                            view.PrintAttackBoard(_gameVM.Player1);
+                            view.PrintAttackBoard(_gameVM.Player2);
+                        }
                         else
                             view.DisplayCombatNotInitiate();
                     }
@@ -104,7 +110,17 @@ namespace Battleship.Controllers
                     break;
 
                 case "XO": //Print Own Board of each player
-                    view.PrintOwnBoard(_gameVM.Player1, _gameVM.Player2);
+                    if (_gameVM.GameInProgress)
+                    {
+                        if (_gameVM.CombatInitiated)
+                        {
+                            view.PrintOwnBoard(_gameVM.Player1);
+                            view.PrintOwnBoard(_gameVM.Player2);
+                        }
+                        else view.DisplayCombatNotInitiate();
+                    }
+                    else view.DisplayGameNotInProgress();
+
                     break;
 
                 case "Xclear": // Clear Console

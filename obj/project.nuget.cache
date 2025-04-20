@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "wqNe4kp69tc=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\tiago\\source\\repos\\Battleship\\Battleship.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\tiago\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\9.0.4\\microsoft.extensions.dependencyinjection.9.0.4.nupkg.sha512",
+    "C:\\Users\\tiago\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.4\\microsoft.extensions.dependencyinjection.abstractions.9.0.4.nupkg.sha512"
+  ],
+  "logs": []
+}

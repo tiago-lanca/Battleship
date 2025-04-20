@@ -13,8 +13,8 @@ namespace Battleship
         {
             /*var services = new ServiceCollection();
             // Registering the services of dependency injection
-            services.AddSingleton<GameViewModel>();
-            services.AddSingleton<PlayerController>();
+            services.AddSingleton<IGameViewModel, GameViewModel>();
+            services.AddSingleton<IPlayerManager, PlayerController>();
             services.AddSingleton<GameController>();
             services.AddSingleton<CommandController>();
             services.AddSingleton<ViewConsole>();
@@ -27,10 +27,10 @@ namespace Battleship
             // Creating the objects manually for dependency injection purposes
             IPlayerList playerList = new PlayerList();
             ViewConsole view = new ViewConsole();
-            GameViewModel gameVM = new GameViewModel();            
-            PlayerController playerController = new PlayerController(gameVM);
-            GameController gameController = new GameController(gameVM, playerController);
-            CommandController commandController = new CommandController(gameVM, gameController, playerController, playerList);
+            IGameViewModel gameVM = new GameViewModel();            
+            IPlayerManager playerManager = new PlayerController(gameVM);
+            GameController gameController = new GameController(gameVM, playerManager);
+            ICommandManager commandManager = new CommandController(gameVM, gameController, playerManager, playerList);
             string command;
 
             // Executing automated inputs for testing 
@@ -51,7 +51,7 @@ namespace Battleship
             while (automatedInputs < 51 && (command = view.GetCommand()) != null)  
             {                
                 Console.WriteLine($"{command}");
-                commandController.CheckCommand(command);
+                commandManager.CheckCommand(command);
                 automatedInputs++;
             }
             Console.SetIn(new StreamReader(Console.OpenStandardInput()));
@@ -61,7 +61,7 @@ namespace Battleship
             do
             {
                 command = view.GetCommand();
-                commandController.CheckCommand(command);
+                commandManager.CheckCommand(command);
             }
             while (!string.IsNullOrWhiteSpace(command));
 

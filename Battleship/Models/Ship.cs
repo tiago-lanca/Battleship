@@ -22,14 +22,14 @@ namespace Battleship.Models
         public virtual int Size { get; }
         public int Team { get; set; }
         public List<Location>? Location { get; set; }
-        public string? Direction { get; set; }
+        public Direction Direction { get; set; }
         public string? Placeholder { get; set; }
-        public ShipState State { get; set; }
+        public State State { get; set; }
 
         #endregion
         
         public Ship() { }
-        public Ship(ShipType type, List<Location> location, string direction, int team, string placeholder, ShipState state = ShipState.Alive)
+        public Ship(ShipType type, List<Location> location, Direction direction, int team, string placeholder, State state = State.Alive)
         {
             Type = type;
             Location = location;
@@ -40,7 +40,7 @@ namespace Battleship.Models
         }
 
         /**
-         * Check if the ship (quantity) type is already deployed on the board
+         * Check if the ship type (quantity) is already deployed on the board (quantity = 0)
          * @param playerShipToDeployList , the playerList of ships available to deploy
          * @return the number of ships's type remaining to deploy
          */
@@ -74,7 +74,7 @@ namespace Battleship.Models
                 // Check if each location of specific ship is hit
                 foreach (var location in Location)
                 {
-                    if (defender.OwnBoard[location.Row, location.Column].State is ShipState.Sunk)
+                    if (defender.OwnBoard[location.Row, location.Column].State is State.Sunk)
                         continue;
                     else return false;
                 }
@@ -109,11 +109,11 @@ namespace Battleship.Models
         public void ChangeShipState(Location attackLocation, Player player)
         {
             var ship = player.OwnBoard[attackLocation.Row, attackLocation.Column];
-            ship.State = ShipState.Sunk;
+            ship.State = State.Sunk;
             ship.Placeholder = "X";
 
             var ship1 = player.Ships.FirstOrDefault(s=>s.Location.Any(l => l.Row == attackLocation.Row && l.Column == attackLocation.Column));
-            ship1.State = ShipState.Sunk;
+            ship1.State = State.Sunk;
         }
         public List<Location> AddLocations(Location initLocation, string orientation = null)
         {
@@ -167,8 +167,11 @@ namespace Battleship.Models
             foreach (var location in this.Location)
                 player.OwnBoard[location.Row, location.Column] = null;
         }
-            
-        
+
+        /**
+         * Clone the ship
+         * @return a new ship with the same properties as the original ship
+         */
         public Ship CloneShip()
         {
             return this switch
@@ -182,25 +185,44 @@ namespace Battleship.Models
             };
         }
 
-        public enum ShipType
+        public Direction GetDirection(string orientation)
         {
-            Speedboat,
-            Submarine,
-            Frigate,
-            Cruiser,
-            Aircraft_Carrier,
-            Hit,
-            Miss
-        } 
-        
-        public enum ShipState
-        {
-            None,
-            Alive,
-            Sunk
+            return orientation?.ToUpper() switch
+            {
+                "N" => Direction.N,
+                "S" => Direction.S,
+                "E" => Direction.E,
+                "O" => Direction.O,
+                _ => Direction.None,
+            };
         }
-    }    
 
+    }
+
+    public enum ShipType
+    {
+        Speedboat,
+        Submarine,
+        Frigate,
+        Cruiser,
+        Aircraft_Carrier,
+        Hit,
+        Miss
+    }
+    public enum State
+    {
+        None,
+        Alive,
+        Sunk
+    }
+    public enum Direction
+    {
+        N,
+        S,
+        E,
+        O,
+        None
+    }
     public class Location
     {
         public int Row { get; set; }

@@ -44,7 +44,7 @@ namespace Battleship.Models
                 view.PlayerAlreadyExists();
         }
 
-        public void RemovePlayer(string name, GameViewModel gameVM)
+        public void RemovePlayer(string name, IGameViewModel gameVM)
         {
             Player player = playerList.Find(player => player.Name == name);
 
@@ -61,7 +61,7 @@ namespace Battleship.Models
             }
 
             playerList.Remove(player);
-            view.PlayerRemoved();
+            //view.PlayerRemoved();
         }
 
         

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static Battleship.Models.Ship;
 
 namespace Battleship.ViewModel
@@ -19,27 +20,46 @@ namespace Battleship.ViewModel
         public Player? Player2 { get; set; }
         public List<Ship>? Player2_ShipsToDeploy { get; set; }
 
-        public bool Turn = true; // true = Player1, false = Player2
-        public bool FirstShot = true;
-        public string[]? GameInProgress_Players = new string[2];
-        public bool GameInProgress = false;
-        public bool CombatInitiated = false;
+        public bool Turn { get; set; } = true; // true = Player1, false = Player2
+        public bool FirstShot { get; set; } = true;
+        public string[]? GameInProgress_Players { get; set; } = new string[2];
+        public bool GameInProgress { get; set; } = false;
+        public bool CombatInitiated { get; set; } = false;
         #endregion
 
+        /**
+         * Verifies if the player is in the active game
+         * @param playerName
+         * @return true if player is in game, false otherwise
+         */
+        public bool IsPlayerInGame(Player player)
+        {
+            foreach (string name in GameInProgress_Players)
+            {
+                if (name == player.Name) return true;
+            }
+
+            return false;
+        }
+
+        // Returns true if the given player has ships to deploy, otherwise returns false
         public bool PlayerShipsToDeploy_Empty(Player player)
         {
             return player.Name == Player1.Name ? Player1_ShipsToDeploy.Count == 0 : Player2_ShipsToDeploy.Count == 0;
         }
 
+        // Returns true if all ships of the players are deployed, otherwise returns false
         public bool AllPlayersShipsDeployed()
         {
             return Player1_ShipsToDeploy.Count == 0 && Player2_ShipsToDeploy.Count == 0;
         }
+
+        // Verify if the ShipList of the given player is null, if so then create a new list and add the ship to it
         public void AddShip_ToPlayerList(Player player, Ship ship)
         {
             if (player == Player1)
             {
-                // Is the ShipsToDeploy is null, instatiate a new list
+                // Verify if the ShipsToDeploy is null, instatiate a new list
                 Player1.Ships ??= new List<Ship>();
                 Player1.Ships.Add(ship);
             }
@@ -50,6 +70,7 @@ namespace Battleship.ViewModel
             }
         }
 
+        // Remove the ship from the player ShipList and remove the ship from the board
         public void RemoveShip_InPlayerList(Ship defenderShip, Player player)
         {
             foreach (var location in defenderShip.Location)
@@ -66,51 +87,42 @@ namespace Battleship.ViewModel
                 Console.WriteLine(e.Message);
             }
         }
+       
+        // Returns the list of ships, of the given player, to get deployed into the board in order to start the game
         public List<Ship> GetPlayerShipToDeployList(Player player)
         {
             return player.Name == Player1.Name ? Player1_ShipsToDeploy : Player2_ShipsToDeploy;
         }
         
-        public void RemoveShipToDeploy(ShipType type, Player player, GameViewModel gameVM)
+        // Returns the name of the given ship
+        public string? GetShipTypeName(Ship ship)
         {
-            GetPlayerShipToDeployList(player).Remove(GetShipByType(type, player, gameVM));
-        }
-        public string GetShipType_PT(Ship ship)
-        {     
-            switch (ship)
+            return ship switch
             {
-                case Speedboat:
-                    return "Lancha";
-                case Submarine:
-                    return "Submarino";
-                case Frigate:
-                    return "Fragata";
-                case Cruiser:
-                    return "Cruzador";
-                case Aircraft_Carrier:
-                    return "Porta Aviões";
-            }
-
-            return default;
+                Speedboat => "Lancha",
+                Submarine => "Submarino",
+                Frigate => "Fragata",
+                Cruiser => "Cruzador",
+                Aircraft_Carrier => "Porta Aviões",
+                _ => default,
+            };
         }
-        public Ship GetShipByType(ShipType type, Player player, GameViewModel gameVM)
-        {
-            List<Ship> shipList = GetPlayerShipToDeployList(player);
-
-            return shipList.FirstOrDefault(ship => ship.Type == type);
-        }
+        
+        // Verify if every ship of the defender player is sunk, if so then return true to finish the game,
+        // otherwise return false
         public bool IsFinished(Player defender)
         {
             foreach (var ship in defender.Ships)
             {
-                if(ship.State is ShipState.Sunk)
+                if(ship.State is State.Sunk)
                     continue;
                 else
                     return false;
             }
             return true;
         }
-        
+
+        /// Verify if the player is in the current active game
         public bool FindPlayer_InProgressGame(string name)
         {
             if (GameInProgress_Players is not null)
@@ -141,6 +153,7 @@ namespace Battleship.ViewModel
             
         }
 
+        // Manage the turn of the players to verify who is going to play and manage the [FirstShot] variable
         public void ManageTurn(Player player)
         {
             if (FirstShot)
@@ -152,6 +165,9 @@ namespace Battleship.ViewModel
             else ChangeTurn();
         }
 
+        // Change the [Turn] variable true-false
         public void ChangeTurn() => Turn = !Turn;
+
+        
     }
 }

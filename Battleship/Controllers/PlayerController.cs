@@ -7,22 +7,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Battleship.Controllers
 {
-    public class PlayerController
+    public class PlayerController : IPlayerManager
     {
         
-        private readonly GameViewModel _gameVM;
-        private readonly ViewConsole view = new ViewConsole();
+        private readonly IGameViewModel _gameVM;
 
-        public PlayerController(GameViewModel gameVM)
+        public PlayerController(IGameViewModel gameVM)
         {
             _gameVM = gameVM;
         }
 
         
-
         /**
          * Finds the player by name
          * @param name

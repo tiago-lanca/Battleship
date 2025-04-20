@@ -10,15 +10,34 @@ namespace Battleship.Interfaces
 {
     public interface IGameViewModel
     {
-        public bool PlayerShipsToDeploy_Empty(Player player);
-        public bool AllPlayersShipsDeployed();
-        public void AddShip_ToPlayerList(Player player, Ship ship);
-        public void RemoveShip_InPlayerList(Ship defenderShip, Player player);
-        public List<Ship> GetPlayerShipToDeployList(Player player);
-        public void RemoveShipToDeploy(Ship.ShipType type, Player player, GameViewModel gameVM);
-        public string GetShipType_PT(Ship ship);
-        public Ship GetShipByType(Ship.ShipType type, Player player, GameViewModel gameVM);
-        public bool IsFinished(Player defender);
-        public bool FindPlayer_InProgressGame(string name);
+        #region Variables
+        Player Player1 { get; set; }
+        List<Ship>? Player1_ShipsToDeploy { get; set; }
+        Player? Player2 { get; set; }
+        List<Ship>? Player2_ShipsToDeploy { get; set; }
+
+        bool Turn { get; set; }
+        bool FirstShot { get; set; }
+        string[]? GameInProgress_Players { get; set; }
+        bool GameInProgress { get; set; }
+        bool CombatInitiated { get; set; }
+        #endregion
+
+        #region Functions
+
+        bool PlayerShipsToDeploy_Empty(Player player);
+        bool AllPlayersShipsDeployed();
+        void AddShip_ToPlayerList(Player player, Ship ship);
+        void RemoveShip_InPlayerList(Ship defenderShip, Player player);
+        List<Ship> GetPlayerShipToDeployList(Player player);
+        string? GetShipTypeName(Ship ship);
+        bool IsFinished(Player defender);
+        bool FindPlayer_InProgressGame(string name);
+        bool IsPlayerInGame(Player player);
+        void ResetGameViewModel();
+        void ManageTurn(Player player);
+        void ChangeTurn();
+
+        #endregion
     }
 }

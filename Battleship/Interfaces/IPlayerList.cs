@@ -12,7 +12,7 @@ namespace Battleship.Interfaces
     {
         void ShowAllPlayers();
         void RegisterPlayer(string name);
-        void RemovePlayer(string name, GameViewModel gameVM);
+        void RemovePlayer(string name, IGameViewModel gameVM);
         List<Player> GetPlayerList();
         //void RemovePlayer(string name);
         bool IsPlayerListEmpty();

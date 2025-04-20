@@ -1,4 +1,5 @@
-﻿using Battleship.Models;
+﻿using Battleship.Interfaces;
+using Battleship.Models;
 using Battleship.Models.ShipsType;
 using Battleship.ViewModel;
 using Battleship.Views;
@@ -17,14 +18,14 @@ namespace Battleship.Controllers
     {
         #region Variables
 
-        private readonly GameViewModel _gameVM = new GameViewModel();
+        private readonly IGameViewModel _gameVM = new GameViewModel();
         private readonly ViewConsole view = new ViewConsole(); 
-        private readonly PlayerController _playerController;
+        private readonly IPlayerManager _playerManager;
 
-        public GameController(GameViewModel gameVM, PlayerController playerController)
+        public GameController(IGameViewModel gameVM, IPlayerManager playerManager)
         {
             _gameVM = gameVM;
-            _playerController = new PlayerController(gameVM);
+            _playerManager = playerManager;
         }
 
         #endregion
@@ -63,21 +64,21 @@ namespace Battleship.Controllers
                     _gameVM.Player1_ShipsToDeploy ??= new List<Ship>();
                     _gameVM.Player1_ShipsToDeploy.AddRange(new List<Ship>
                     {
-                        new Speedboat(ShipType.Speedboat, null, null, 1, "L"),
-                        new Submarine(ShipType.Submarine, null, null, 1, "S"),
-                        new Frigate(ShipType.Frigate, null, null, 1, "F"),
-                        new Cruiser(ShipType.Cruiser, null, null, 1, "C"),
-                        new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, null, 1, "P")
+                        new Speedboat(ShipType.Speedboat, null, Direction.None, 1, "L"),
+                        new Submarine(ShipType.Submarine, null, Direction.None, 1, "S"),
+                        new Frigate(ShipType.Frigate, null, Direction.None, 1, "F"),
+                        new Cruiser(ShipType.Cruiser, null, Direction.None, 1, "C"),
+                        new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, Direction.None, 1, "P")
                     });
 
                     _gameVM.Player2_ShipsToDeploy ??= new List<Ship>();
                     _gameVM.Player2_ShipsToDeploy.AddRange(new List<Ship>
                     {
-                        new Speedboat(ShipType.Speedboat, null, null, 2, "L"),
-                        new Submarine(ShipType.Submarine, null, null, 2, "S"),
-                        new Frigate(ShipType.Frigate, null, null, 2, "F"),
-                        new Cruiser(ShipType.Cruiser, null, null, 2, "C"),
-                        new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, null, 2, "P")
+                        new Speedboat(ShipType.Speedboat, null, Direction.None, 2, "L"),
+                        new Submarine(ShipType.Submarine, null, Direction.None, 2, "S"),
+                        new Frigate(ShipType.Frigate, null, Direction.None, 2, "F"),
+                        new Cruiser(ShipType.Cruiser, null, Direction.None, 2, "C"),
+                        new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, Direction.None, 2, "P")
                     });
                 }
                 else
@@ -92,7 +93,7 @@ namespace Battleship.Controllers
         {
             if (_gameVM.GameInProgress)
             {
-                if (player.IsInGame(_gameVM))
+                if (_gameVM.IsPlayerInGame(player))
                 {
                     if (!_gameVM.PlayerShipsToDeploy_Empty(player))
                     {
@@ -114,12 +115,12 @@ namespace Battleship.Controllers
 
                                     if (emptyAround)
                                     {
-                                        // Creates Speedboat for the player                                    
+                                        // Creates Speedboat for the player                                        
                                         Speedboat playerShip = new Speedboat(
                                             ShipType.Speedboat,
                                             new List<Location>(speedboat.AddLocations(initLocation)),
-                                            null,
-                                            _playerController.GetPlayerTeam(player),
+                                            speedboat.GetDirection(orientation),
+                                            _playerManager.GetPlayerTeam(player),
                                             speedboat.Code
                                         );
 
@@ -155,8 +156,8 @@ namespace Battleship.Controllers
                                         Submarine playerShip = new Submarine(
                                             ShipType.Submarine,
                                             new List<Location>(submarine.AddLocations(initLocation, orientation)),
-                                            orientation,
-                                            _playerController.GetPlayerTeam(player),
+                                            submarine.GetDirection(orientation),
+                                            _playerManager.GetPlayerTeam(player),
                                             submarine.Code
                                             );
 
@@ -193,8 +194,8 @@ namespace Battleship.Controllers
                                         Frigate playerShip = new Frigate(
                                             ShipType.Frigate,
                                             new List<Location>(frigate.AddLocations(initLocation, orientation)),
-                                            orientation,
-                                            _playerController.GetPlayerTeam(player),
+                                            frigate.GetDirection(orientation),
+                                            _playerManager.GetPlayerTeam(player),
                                             frigate.Code
                                             );
 
@@ -230,8 +231,8 @@ namespace Battleship.Controllers
                                         Cruiser playerShip = new Cruiser(
                                             ShipType.Cruiser,
                                             new List<Location>(cruiser.AddLocations(initLocation, orientation)),
-                                            orientation,
-                                            _playerController.GetPlayerTeam(player),
+                                            cruiser.GetDirection(orientation),
+                                            _playerManager.GetPlayerTeam(player),
                                             cruiser.Code
                                             );
 
@@ -267,8 +268,8 @@ namespace Battleship.Controllers
                                         Aircraft_Carrier playerShip = new Aircraft_Carrier(
                                             ShipType.Aircraft_Carrier,
                                             new List<Location>(aircraft_carrier.AddLocations(initLocation, orientation)),
-                                            orientation,
-                                            _playerController.GetPlayerTeam(player),
+                                            aircraft_carrier.GetDirection(orientation),
+                                            _playerManager.GetPlayerTeam(player),
                                             aircraft_carrier.Code
                                             );
 
@@ -341,7 +342,7 @@ namespace Battleship.Controllers
             {
                 if (!_gameVM.CombatInitiated)
                 {
-                    if(player.IsInGame(_gameVM))
+                    if(_gameVM.IsPlayerInGame(player))
                     {
                         Ship ship = player.OwnBoard[initLocation.Row, initLocation.Column];
                         if (ship is not null)
@@ -389,9 +390,10 @@ namespace Battleship.Controllers
             {
                 if (_gameVM.CombatInitiated)
                 {
-                    if (player.IsInGame(_gameVM))
+                    if (_gameVM.IsPlayerInGame(player))
                     {
-                        if (_gameVM.FirstShot || _playerController.CheckTurn(player))
+
+                        if (_gameVM.FirstShot || _playerManager.CheckTurn(player))
                         {
                             Location attackLocation = new Location(
                                 GetRowCoord(row),
@@ -411,7 +413,7 @@ namespace Battleship.Controllers
 
                                     attacker.Shots++;
                                     attacker.ShotsOnTargets++;
-                                    attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Hit, null, null, _playerController.GetPlayerTeam(attacker), "X");
+                                    attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Hit, null, Direction.None, _playerManager.GetPlayerTeam(attacker), "X");
 
                                     defenderShip.ChangeShipState(attackLocation, defender);
 
@@ -423,13 +425,13 @@ namespace Battleship.Controllers
                                         // Checks if the game is finished, if all ships of the defender are sunk
                                         if (_gameVM.IsFinished(defender))
                                         {
-                                            _playerController.AddStatsToPlayers(attacker, defender);
+                                            _playerManager.AddStatsToPlayers(attacker, defender);
 
                                             _gameVM.ResetGameViewModel();
 
                                             // Resets the InGameStats (ShipList, Nr Shots, AttackBoard, OwnBoard) of the given player
-                                            _playerController.ResetInGameStats(attacker);
-                                            _playerController.ResetInGameStats(defender);
+                                            _playerManager.ResetInGameStats(attacker);
+                                            _playerManager.ResetInGameStats(defender);
 
                                             view.ShipSunk_GameFinished(defenderShip, _gameVM);
                                         }
@@ -444,8 +446,8 @@ namespace Battleship.Controllers
                                 else
                                 {
                                     attacker.Shots++;
-                                    attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Miss, null, null, _playerController.GetPlayerTeam(attacker), "*");
-                                    defender.OwnBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Miss, null, null, _playerController.GetPlayerTeam(defender), "*");
+                                    attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Miss, null, Direction.None, _playerManager.GetPlayerTeam(attacker), "*");
+                                    defender.OwnBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Miss, null, Direction.None, _playerManager.GetPlayerTeam(defender), "*");
                                     Console.WriteLine("Tiro na água.\n");
                                 }
 

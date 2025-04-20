@@ -1,4 +1,5 @@
-﻿using Battleship.Models;
+﻿using Battleship.Interfaces;
+using Battleship.Models;
 using Battleship.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -60,7 +61,7 @@ namespace Battleship.Views
             Console.WriteLine($"Jogo iniciado entre {players[0]} e {players[1]}.\n");
         }
 
-        public void PrintAttackBoard(Player player)
+        public void PrintAttackBoard(Player? player)
         {
             // Print stats of the player
             Console.WriteLine($"Nome: {player.Name} Tiros: {player.Shots} TirosEmNavios: {player.ShotsOnTargets}" +
@@ -195,18 +196,18 @@ namespace Battleship.Views
         {
             Console.WriteLine("Jogo em curso sem combate iniciado.\n");
         }
-        public void DisplaySunkShip(Ship ship, GameViewModel gameVM)
+        public void DisplaySunkShip(Ship ship, IGameViewModel gameVM)
         {
-            Console.WriteLine($"Navio {gameVM.GetShipType_PT(ship)} afundado.\n");
+            Console.WriteLine($"Navio {gameVM.GetShipTypeName(ship)} afundado.\n");
         }
 
-        public void DisplayShipHit(Ship ship, GameViewModel gameVM)
+        public void DisplayShipHit(Ship ship, IGameViewModel gameVM)
         {
-            Console.WriteLine($"Tiro em navio {gameVM.GetShipType_PT(ship)}.\n");
+            Console.WriteLine($"Tiro em navio {gameVM.GetShipTypeName(ship)}.\n");
         }
-        public void ShipSunk_GameFinished(Ship ship, GameViewModel gameVM)
+        public void ShipSunk_GameFinished(Ship ship, IGameViewModel gameVM)
         {
-            Console.WriteLine($"Navio {gameVM.GetShipType_PT(ship)} afundado. Jogo terminado.\n");
+            Console.WriteLine($"Navio {gameVM.GetShipTypeName(ship)} afundado. Jogo terminado.\n");
         }
         public void DisplayPlayerInProgressGame()
         {

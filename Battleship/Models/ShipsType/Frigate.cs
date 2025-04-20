@@ -15,7 +15,7 @@ namespace Battleship.Models.ShipsType
         public override int Quantity { get; set; } = 2;
 
         public Frigate() { }
-        public Frigate(ShipType type, List<Location> location, string direction, int team, string placeholder, ShipState state = ShipState.Alive) 
+        public Frigate(ShipType type, List<Location> location, Direction direction, int team, string placeholder, State state = State.Alive) 
             : base(type, location, direction, team, placeholder, state)
         {
 

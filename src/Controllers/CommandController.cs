@@ -63,7 +63,7 @@ namespace Battleship.Controllers
 
                 case "D": // Forfeit
                     if (words.Length.HasRequiredInputs(2))
-                        _gameController.ForfeitGame(_playerController.FindPlayerByName(words[1]));
+                        _gameController.ForfeitGame(_playerController.FindPlayerByName(words[1])!);
 
                     else if (words.Length.HasRequiredInputs(3))
                         _gameController.ForfeitGame(_playerController.FindPlayerByName(words[1]), _playerController.FindPlayerByName(words[2]));

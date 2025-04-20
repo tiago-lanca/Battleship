@@ -112,7 +112,7 @@ namespace Battleship.Models
             ship.State = State.Sunk;
             ship.Placeholder = "X";
 
-            var ship1 = player.Ships.FirstOrDefault(s=>s.Location.Any(l => l.Row == attackLocation.Row && l.Column == attackLocation.Column));
+            var ship1 = player.ShipsInGame.FirstOrDefault(s=>s.Location.Any(l => l.Row == attackLocation.Row && l.Column == attackLocation.Column));
             ship1.State = State.Sunk;
         }
         public List<Location> AddLocations(Location initLocation, string orientation = null)

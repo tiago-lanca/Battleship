@@ -56,7 +56,7 @@ namespace Battleship.Views
             Console.WriteLine("Jogador existente.\n");
         }
 
-        public void GameStartedSortedNames(string[] players)
+        public void MessageGameStart(string[] players)
         {
             Console.WriteLine($"Jogo iniciado entre {players[0]} e {players[1]}.\n");
         }
@@ -212,6 +212,10 @@ namespace Battleship.Views
         public void DisplayPlayerInProgressGame()
         {
             Console.WriteLine("Jogador participa no jogo em curso.\n");
+        }
+        public void MessageForfeitGame()
+        {
+            Console.WriteLine("Desistência com sucesso. Jogo terminado.\n");
         }
     }
 }

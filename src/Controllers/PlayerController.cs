@@ -64,7 +64,7 @@ namespace Battleship.Controllers
 
         public void ResetInGameStats(Player player)
         {
-            player.Ships.Clear();
+            player.ShipsInGame.Clear();
             player.OwnBoard = null;
             player.AttackBoard = null;
             player.Shots = 0;

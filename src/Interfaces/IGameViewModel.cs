@@ -11,11 +11,8 @@ namespace Battleship.Interfaces
     public interface IGameViewModel
     {
         #region Variables
-        Player Player1 { get; set; }
-        List<Ship>? Player1_ShipsToDeploy { get; set; }
+        Player? Player1 { get; set; }
         Player? Player2 { get; set; }
-        List<Ship>? Player2_ShipsToDeploy { get; set; }
-
         bool Turn { get; set; }
         bool FirstShot { get; set; }
         string[]? GameInProgress_Players { get; set; }
@@ -37,6 +34,7 @@ namespace Battleship.Interfaces
         void ResetGameViewModel();
         void ManageTurn(Player player);
         void ChangeTurn();
+        void SetupPlayersIntoGame(Player player1, Player player2);
 
         #endregion
     }

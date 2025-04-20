@@ -36,50 +36,19 @@ namespace Battleship.Controllers
         {
             if (_gameVM is null || !_gameVM.GameInProgress)
             {
-                bool player1Exists = playerList.Exists(player => player.Name == player1);
-                bool player2Exists = playerList.Exists(player => player.Name == player2);
+                Player? Player1 = playerList.Find(player => player.Name == player1);
+                Player? Player2 = playerList.Find(player => player.Name == player2);
 
-                // Verifica se player 1 e player 2 estão registados
-                if (player1Exists && player2Exists)
-                {                    
-                   
-                    _gameVM.Player1 = playerList.Find(player => player.Name == player1);
-                    _gameVM.Player2 = playerList.Find(player => player.Name == player2);
+                // Check if both players are registered in the active PlayerList
+                if (Player1 is not null && Player2 is not null)
+                {
+                    // Setup in a function the gameVM data //
 
-                    _gameVM.GameInProgress_Players[0] = player1;
-                    _gameVM.GameInProgress_Players[1] = player2;
+                    _gameVM.SetupPlayersIntoGame(Player1, Player2);
 
-                    // Filtra alfabeticamente os jogadores para jogo
-                    SortByName_GameStart(player1, player2);
-
-                    view.GameStartedSortedNames(SortByName_GameStart(player1, player2));
+                    // Sort the players by name and print the message
+                    view.MessageGameStart(SortByName_GameStart(player1, player2));
                     _gameVM.GameInProgress = true;
-
-                    _gameVM.Player1.OwnBoard = new Ship[10, 10];
-                    _gameVM.Player1.AttackBoard = new Ship[10, 10];
-
-                    _gameVM.Player2.OwnBoard = new Ship[10, 10];
-                    _gameVM.Player2.AttackBoard = new Ship[10, 10];
-
-                    _gameVM.Player1_ShipsToDeploy ??= new List<Ship>();
-                    _gameVM.Player1_ShipsToDeploy.AddRange(new List<Ship>
-                    {
-                        new Speedboat(ShipType.Speedboat, null, Direction.None, 1, "L"),
-                        new Submarine(ShipType.Submarine, null, Direction.None, 1, "S"),
-                        new Frigate(ShipType.Frigate, null, Direction.None, 1, "F"),
-                        new Cruiser(ShipType.Cruiser, null, Direction.None, 1, "C"),
-                        new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, Direction.None, 1, "P")
-                    });
-
-                    _gameVM.Player2_ShipsToDeploy ??= new List<Ship>();
-                    _gameVM.Player2_ShipsToDeploy.AddRange(new List<Ship>
-                    {
-                        new Speedboat(ShipType.Speedboat, null, Direction.None, 2, "L"),
-                        new Submarine(ShipType.Submarine, null, Direction.None, 2, "S"),
-                        new Frigate(ShipType.Frigate, null, Direction.None, 2, "F"),
-                        new Cruiser(ShipType.Cruiser, null, Direction.None, 2, "C"),
-                        new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, Direction.None, 2, "P")
-                    });
                 }
                 else
                     view.DisplayPlayerNotRegistered();
@@ -598,27 +567,39 @@ namespace Battleship.Controllers
 
         public void ForfeitGame(Player player1, Player player2 = null)
         {
-            if (player2 is null)
+            if (_gameVM.GameInProgress)
             {
-                Player playerLoss = player1;
-                Player playerWin = _gameVM.Player1.Name == player1.Name ? _gameVM.Player2 : _gameVM.Player1;
-                
-                playerWin.NumGames++;
-                playerWin.NumVictory++;
-                playerLoss.NumGames++;
-                
+                if (_gameVM.IsPlayerInGame(player1))
+                {
+                    // Both players want to forfeit the game
+                    if (player2 is not null && _gameVM.IsPlayerInGame(player2))
+                    {
+                        player1.NumGames++;
+                        player2.NumGames++;
+                    }
+
+                    // Only one player wants to forfeit the game
+                    else
+                    {
+                        Player playerLoss = player1;
+                        Player playerWin = _gameVM.Player1.Name == player1.Name ? _gameVM.Player2 : _gameVM.Player1;
+
+                        playerWin.NumGames++;
+                        playerWin.NumVictory++;
+                        playerLoss.NumGames++;
+                    }
+
+                    view.MessageForfeitGame();
+                }
+                else view.DisplayPlayerNotInProgressGame();
             }
-            else
-            {
-                player1.NumGames++;
-                player2.NumGames++;
-            }
+            else view.DisplayGameNotInProgress();
 
 
             _gameVM.ResetGameViewModel();
             //_playerController.UpdateGameViewModel(_gameVM);
             //_playerController.UpdateGameViewModel(_gameVM);
-            Console.WriteLine("Desistência com sucesso. Jogo terminado.\n");
+            
         }
 
         /**

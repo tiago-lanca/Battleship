@@ -13,7 +13,8 @@ namespace Battleship.Models
         public string Name { get; set; }
         public int NumGames { get; set; }
         public int NumVictory { get; set; }
-        public List<Ship> Ships { get; set; }
+        public List<Ship> ShipsInGame { get; set; }
+        public List<Ship>? ShipsToDeploy { get; set; }
         public Ship[,] OwnBoard { get; set; }
         public Ship[,] AttackBoard { get; set; }
         public int Shots { get; set; }

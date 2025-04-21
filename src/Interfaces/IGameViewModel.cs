@@ -35,6 +35,7 @@ namespace Battleship.Interfaces
         void ManageTurn(Player player);
         void ChangeTurn();
         void SetupPlayersIntoGame(Player player1, Player player2);
+        Player? FindPlayerInGameByName(string name);
 
         #endregion
     }

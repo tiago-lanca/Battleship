@@ -13,7 +13,7 @@ namespace Battleship.Interfaces
     {
         public int GetRemainingQuantity(List<T> playerShipToDeployList);
         public void RemoveQuantityToDeploy(List<T> playerShipToDeployList);
-        public List<Location> AddLocations(Location initLocation, string orientation = null);
+        public List<Location> AddLocations(Location initLocation, Direction? direction);
         public bool Is_ShipSunk(Player attacker);
         
     }

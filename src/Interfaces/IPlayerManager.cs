@@ -9,9 +9,8 @@ namespace Battleship.Interfaces
 {
     public interface IPlayerManager
     {
-        Player? FindPlayerByName(string name);
         int GetPlayerTeam(Player player);
-        bool CheckTurn(Player player);
+        bool IsPlayerTurn(Player player);
         void AddStatsToPlayers(Player attacker, Player defender);
         void ResetInGameStats(Player player);
         int GetTurn(bool turn);

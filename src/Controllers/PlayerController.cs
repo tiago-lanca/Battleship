@@ -21,19 +21,6 @@ namespace Battleship.Controllers
             _gameVM = gameVM;
         }
 
-        
-        /**
-         * Finds the player by name
-         * @param name
-         * @return Player object
-         */
-        public Player? FindPlayerByName(string name)
-        {
-            if (_gameVM is null) return null;
-
-            return _gameVM.Player1!.Name == name ? _gameVM.Player1 : _gameVM.Player2;
-        }
-
         /**
          * Gets the team of the given player
          * @param player
@@ -44,7 +31,7 @@ namespace Battleship.Controllers
             return player.Name == _gameVM.GameInProgress_Players[0] ? 1 : 2;
         }
 
-        public bool CheckTurn(Player player)
+        public bool IsPlayerTurn(Player player)
         {
             return player.Name == _gameVM.GameInProgress_Players[GetTurn(_gameVM.Turn)];
         }

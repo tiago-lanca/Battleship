@@ -93,7 +93,7 @@ namespace Battleship.Models
             defender.OwnBoard[attackLocation.Row, attackLocation.Column] is not null;
 
         // Create a new ship based on the type of the ship
-        public Ship? CreateNewShip()
+        public Ship? CreateNewShipOfType()
         {
             return this switch
             {
@@ -108,50 +108,70 @@ namespace Battleship.Models
 
         public void ChangeShipState(Location attackLocation, Player player)
         {
-            var ship = player.OwnBoard[attackLocation.Row, attackLocation.Column];
-            ship.State = State.Sunk;
-            ship.Placeholder = "X";
+            Ship shipOnBoardView = player.OwnBoard[attackLocation.Row, attackLocation.Column];
+            shipOnBoardView.State = State.Sunk;
+            shipOnBoardView.Placeholder = "X";
 
-            var ship1 = player.ShipsInGame.FirstOrDefault(s=>s.Location.Any(l => l.Row == attackLocation.Row && l.Column == attackLocation.Column));
-            ship1.State = State.Sunk;
+            Ship? shipInGame = player.ShipsInGame
+                .FirstOrDefault(ship => ship.Location is not null && ship.Location.
+                    Any(location => location.Row == attackLocation.Row && location.Column == attackLocation.Column));
+
+            if (shipInGame is not null)
+            {
+                bool AnyAlivePart = shipInGame.Location is not null && shipInGame.Location.
+                    Any(location => player.OwnBoard[location.Row, location.Column].State is State.Alive);
+
+                shipInGame.State = AnyAlivePart ? State.Alive : State.Sunk;
+            }
         }
-        public List<Location> AddLocations(Location initLocation, string orientation = null)
+
+        public Location GetNewLocation(Location initLocation, Direction direction, int offset)
+        {
+            return direction switch
+            {
+                Direction.N => new Location(initLocation.Row - offset, initLocation.Column),
+                Direction.S => new Location(initLocation.Row + offset, initLocation.Column),
+                Direction.E => new Location(initLocation.Row, initLocation.Column + offset),
+                Direction.O => new Location(initLocation.Row, initLocation.Column - offset),
+                _ => initLocation,
+            };
+        }
+        public List<Location> AddLocations(Location initLocation, Direction? direction = null)
         {
             List<Location> locations = new List<Location>();
 
-            switch (orientation)
+            switch (direction)
             {
-
-                case "E":
+                case Direction.N:
                     for (int i = 0; i < Size; i++)
                     {
-                        locations.Add(new Location(initLocation.Row, initLocation.Column + i));
+                        locations.Add(GetNewLocation(initLocation, Direction.N, i));
                     }
                     break;
 
-                case "N":
+                case Direction.S:
                     for (int i = 0; i < Size; i++)
                     {
-                        locations.Add(new Location(initLocation.Row - i, initLocation.Column));
+                        locations.Add(GetNewLocation(initLocation, Direction.S, i));
                     }
                     break;
 
-                case "S":
+                case Direction.E:
                     for (int i = 0; i < Size; i++)
                     {
-                        locations.Add(new Location(initLocation.Row + i, initLocation.Column));
+                        locations.Add(GetNewLocation(initLocation, Direction.E, i));
                     }
                     break;
 
-                case "O":
+                case Direction.O:
                     for (int i = 0; i < Size; i++)
                     {
-                        locations.Add(new Location(initLocation.Row, initLocation.Column - i));
+                        locations.Add(GetNewLocation(initLocation, Direction.O, i));
                     }
                     break;
 
                 case null:
-                    locations.Add(new Location(initLocation.Row, initLocation.Column));
+                    locations.Add(initLocation);
                     break;
             }
 
@@ -182,18 +202,6 @@ namespace Battleship.Models
                 Cruiser => new Cruiser(Type, Location, Direction, Team, Placeholder, State),
                 Aircraft_Carrier => new Aircraft_Carrier(Type, Location, Direction, Team, Placeholder, State),
                 _ => throw new Exception("Ship type not found"),
-            };
-        }
-
-        public Direction GetDirection(string orientation)
-        {
-            return orientation?.ToUpper() switch
-            {
-                "N" => Direction.N,
-                "S" => Direction.S,
-                "E" => Direction.E,
-                "O" => Direction.O,
-                _ => Direction.None,
             };
         }
 

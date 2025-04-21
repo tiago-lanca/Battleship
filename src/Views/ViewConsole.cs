@@ -217,5 +217,9 @@ namespace Battleship.Views
         {
             Console.WriteLine("Desistência com sucesso. Jogo terminado.\n");
         }
+        public void DisplayAlreadySunkShip(Ship defenderShip, IGameViewModel gameVM)
+        {
+            Console.WriteLine("Posição irregular. Essa localização do navio já foi afundada.\n");
+        }
     }
 }

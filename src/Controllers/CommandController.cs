@@ -1,5 +1,6 @@
 ﻿using Battleship.Extensions;
 using Battleship.Interfaces;
+using Battleship.Models;
 using Battleship.ViewModel;
 using Battleship.Views;
 using System;
@@ -63,26 +64,26 @@ namespace Battleship.Controllers
 
                 case "D": // Forfeit
                     if (words.Length.HasRequiredInputs(2))
-                        _gameController.ForfeitGame(_playerController.FindPlayerByName(words[1])!);
+                        _gameController.ForfeitGame(_gameVM.FindPlayerInGameByName(words[1])!);
 
                     else if (words.Length.HasRequiredInputs(3))
-                        _gameController.ForfeitGame(_playerController.FindPlayerByName(words[1]), _playerController.FindPlayerByName(words[2]));
+                        _gameController.ForfeitGame(_gameVM.FindPlayerInGameByName(words[1]), _gameVM.FindPlayerInGameByName(words[2]));
                     else
                         view.InvalidInstruction();
                     break;
 
                 case "CN": // Setup Ships
                     if (words.Length.HasRequiredInputs(5))
-                        _gameController.Setup_Ship(_playerController.FindPlayerByName(words[1]), words[2], words[3], words[4]);
+                        _gameController.Setup_Ship(_gameVM.FindPlayerInGameByName(words[1]), words[2], words[3], words[4]);
                     else if (words.Length.HasRequiredInputs(6))
-                        _gameController.Setup_Ship(_playerController.FindPlayerByName(words[1]), words[2], words[3], words[4], words[5]);
+                        _gameController.Setup_Ship(_gameVM.FindPlayerInGameByName(words[1]), words[2], words[3], words[4], GetDirection(words[5]));
                     else
                         view.InvalidInstruction();
                     break;
 
                 case "RN": // Remove Ship
                     if (words.Length.HasRequiredInputs(4))
-                        _gameController.RemoveShip(_playerController.FindPlayerByName(words[1]), words[2], words[3]);
+                        _gameController.RemoveShip(_gameVM.FindPlayerInGameByName(words[1]), words[2], words[3]);
                     else
                         view.InvalidInstruction();
                     break;
@@ -90,7 +91,7 @@ namespace Battleship.Controllers
                 case "T": // Execute Attack
                     if (words.Length.HasRequiredInputs(4))
                         if (_gameVM.CombatInitiated) 
-                            _gameController.MakeAttack(_playerController.FindPlayerByName(words[1]), words[2], words[3]);
+                            _gameController.MakeAttack(_gameVM.FindPlayerInGameByName(words[1]), words[2], words[3]);
                         else view.InvalidInstruction();
                     else
                         view.InvalidInstruction();
@@ -119,12 +120,8 @@ namespace Battleship.Controllers
                 case "XO": //Print Own Board of each player
                     if (_gameVM.GameInProgress)
                     {
-                        if (_gameVM.CombatInitiated)
-                        {
-                            view.PrintOwnBoard(_gameVM.Player1);
-                            view.PrintOwnBoard(_gameVM.Player2);
-                        }
-                        else view.DisplayCombatNotInitiate();
+                        view.PrintOwnBoard(_gameVM.Player1);
+                        view.PrintOwnBoard(_gameVM.Player2);
                     }
                     else view.DisplayGameNotInProgress();
 
@@ -139,7 +136,19 @@ namespace Battleship.Controllers
                     break;
             }
         }
-        
+
+        public Direction GetDirection(string orientation)
+        {
+            return orientation?.ToUpper() switch
+            {
+                "N" => Direction.N,
+                "S" => Direction.S,
+                "E" => Direction.E,
+                "O" => Direction.O,
+                _ => Direction.None,
+            };
+        }
+
         public void UpdateGameViewModel(GameViewModel newGameVM) =>
             _gameVM = newGameVM; 
     }

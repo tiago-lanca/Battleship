@@ -31,14 +31,30 @@ namespace Battleship.ViewModel
          * @param playerName
          * @return true if player is in game, false otherwise
          */
-        public bool IsPlayerInGame(Player player)
+        public bool IsPlayerInGame(Player? player)
         {
+            if(player is null) return false;
+
             foreach (string name in GameInProgress_Players)
             {
                 if (name == player.Name) return true;
             }
 
             return false;
+        }
+
+        /**
+         * Checks if the given name is the same as any of the players in the active game
+         * @param name
+         * @return Player object in the active game or null if not found
+         */
+        public Player? FindPlayerInGameByName(string name)
+        {
+            if (Player1 is null || Player2 is null)
+                return null;
+
+            return Player1.Name == name ? Player1 :
+                   Player2.Name == name ? Player2 : null;
         }
 
         // Returns true if the given player has ships to deploy, otherwise returns false
@@ -141,13 +157,15 @@ namespace Battleship.ViewModel
          */
         public void ResetGameViewModel()
         {
+            Player1.ShipsToDeploy.Clear();
+            Player1.ShipsInGame.Clear();
+            ClearPlayerGameStats(Player1);
             Player1 = null;
-            //Player1.ShipsToDeploy.Clear();
-            //Player1.ShipsInGame.Clear();
 
-            Player2 = null;
-            //Player2.ShipsToDeploy.Clear();
-            //Player2.ShipsInGame.Clear();
+            Player2.ShipsToDeploy.Clear();
+            Player2.ShipsInGame.Clear();
+            ClearPlayerGameStats(Player2);
+            Player2 = null;            
 
             GameInProgress_Players = new string[2];
             GameInProgress = false;
@@ -173,7 +191,8 @@ namespace Battleship.ViewModel
 
         public void SetupPlayersIntoGame(Player player1, Player player2)
         {
-            Player1 = player1; Player2 = player2;
+            Player1 = player1; 
+            Player2 = player2;
             GameInProgress_Players[0] = player1.Name;
             GameInProgress_Players[1] = player2.Name;
 
@@ -202,6 +221,13 @@ namespace Battleship.ViewModel
                         new Cruiser(ShipType.Cruiser, null, Direction.None, 2, "C"),
                         new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, Direction.None, 2, "P")
             });
+        }
+
+        public void ClearPlayerGameStats(Player player)
+        {
+            player.Shots = 0;
+            player.ShotsOnTargets = 0;
+            player.EnemySunkShips = 0;
         }
     }
 }

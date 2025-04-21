@@ -20,22 +20,21 @@ namespace Battleship.Models
         public ShipType Type { get; set; }
         public virtual int Quantity { get; set; }
         public virtual int Size { get; }
-        public int Team { get; set; }
         public List<Location>? Location { get; set; }
         public Direction Direction { get; set; }
-        public string? Placeholder { get; set; }
+        public virtual Code Code { get; set; }
         public State State { get; set; }
 
         #endregion
         
         public Ship() { }
-        public Ship(ShipType type, List<Location> location, Direction direction, int team, string placeholder, State state = State.Alive)
+        public Ship(ShipType type) { Type = type; }
+        public Ship(ShipType type, List<Location> location, Direction direction, Code code, State state = State.Alive)
         {
             Type = type;
             Location = location;
-            Direction = direction;
-            Team = team;             
-            Placeholder = placeholder;
+            Direction = direction;          
+            Code = code;
             State = state;
         }
 
@@ -93,7 +92,7 @@ namespace Battleship.Models
             defender.OwnBoard[attackLocation.Row, attackLocation.Column] is not null;
 
         // Create a new ship based on the type of the ship
-        public Ship? CreateNewShipOfType()
+        public Ship? CreateNewShip()
         {
             return this switch
             {
@@ -106,11 +105,37 @@ namespace Battleship.Models
             };
         }
 
+        public static Ship? CreateNewShip(string type)
+        {
+            return type switch
+            {
+                "L" => new Speedboat(type: ShipType.Speedboat),
+                "S" => new Submarine(type: ShipType.Submarine),
+                "F" => new Frigate(type: ShipType.Frigate),
+                "C" => new Cruiser(type: ShipType.Cruiser),
+                "P" => new Aircraft_Carrier(type: ShipType.Aircraft_Carrier),
+                _ => null,
+            };
+        }
+
+        public Ship? CreateNewShip(ShipType type, List<Location> shipLocations, Direction direction, Code code)
+        {
+            return type switch
+            {
+                ShipType.Speedboat => new Speedboat(type, shipLocations, direction, Code.Speedboat),
+                ShipType.Submarine => new Submarine(type, shipLocations, direction, Code.Submarine),
+                ShipType.Frigate => new Frigate(type, shipLocations, direction, Code.Frigate),
+                ShipType.Cruiser => new Cruiser(type, shipLocations, direction, Code.Cruiser),
+                ShipType.Aircraft_Carrier => new Aircraft_Carrier(type, shipLocations, direction, Code.Aircraft_Carrier),
+                _ => null,
+            };
+        }
+
         public void ChangeShipState(Location attackLocation, Player player)
         {
             Ship shipOnBoardView = player.OwnBoard[attackLocation.Row, attackLocation.Column];
             shipOnBoardView.State = State.Sunk;
-            shipOnBoardView.Placeholder = "X";
+            shipOnBoardView.Code = Code.Hit;
 
             Ship? shipInGame = player.ShipsInGame
                 .FirstOrDefault(ship => ship.Location is not null && ship.Location.
@@ -196,11 +221,11 @@ namespace Battleship.Models
         {
             return this switch
             {
-                Speedboat => new Speedboat(Type, Location, Direction, Team, Placeholder, State),
-                Submarine => new Submarine(Type, Location, Direction, Team, Placeholder, State),
-                Frigate => new Frigate(Type, Location, Direction, Team, Placeholder, State),
-                Cruiser => new Cruiser(Type, Location, Direction, Team, Placeholder, State),
-                Aircraft_Carrier => new Aircraft_Carrier(Type, Location, Direction, Team, Placeholder, State),
+                Speedboat => new Speedboat(Type, Location, Direction, Code, State),
+                Submarine => new Submarine(Type, Location, Direction, Code, State),
+                Frigate => new Frigate(Type, Location, Direction, Code, State),
+                Cruiser => new Cruiser(Type, Location, Direction, Code, State),
+                Aircraft_Carrier => new Aircraft_Carrier(Type, Location, Direction, Code, State),
                 _ => throw new Exception("Ship type not found"),
             };
         }
@@ -230,6 +255,17 @@ namespace Battleship.Models
         E,
         O,
         None
+    }
+
+    public enum Code
+    {
+        Speedboat = 'L',
+        Submarine = 'S',
+        Frigate = 'F',
+        Cruiser = 'C',
+        Aircraft_Carrier = 'P',
+        Hit = 'X',
+        Miss = '*'
     }
     public class Location
     {

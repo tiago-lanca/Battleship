@@ -68,193 +68,41 @@ namespace Battleship.Controllers
                     {
                         var initLocation = new Location(GetRowCoord(row), GetColumnCoord(char.Parse(column)));
                         List<Ship> playerShipsToDeployList = _gameVM.GetPlayerShipToDeployList(player);
-                        int remainingShips;
-                        bool emptyAround;
 
-                        switch (type)
+                        var ship = Ship.CreateNewShip(type);
+                        if (ship is null) return;
+
+                        int remainingShips = ship.GetRemainingQuantity(playerShipsToDeployList);
+
+                        // Verify if there is available ships to deploy of that type
+                        if (remainingShips > 0)
                         {
-                            case "L": // Speeboat
-                                var speedboat = new Speedboat();
-                                remainingShips = speedboat.GetRemainingQuantity(playerShipsToDeployList);
+                            // Verify if surroundings are empty spaces
+                            bool emptyAround = VerifySurroundings(player, initLocation, ship, direction);
 
-                                if (remainingShips > 0)
-                                {
-                                    // Verify if surroundings are empty spaces
-                                    emptyAround = VerifySurroundings(player, initLocation, speedboat);
+                            if (emptyAround)
+                            {
+                                // Creates submarine for the player
+                                ship = ship.CreateNewShip(
+                                    type: ship.Type,
+                                    shipLocations: ship.AddLocations(initLocation, direction),
+                                    direction: direction,
+                                    code: ship.Code
+                                 );
 
-                                    if (emptyAround)
-                                    {
-                                        // Creates Speedboat for the player                                        
-                                        speedboat = new Speedboat(
-                                            ShipType.Speedboat,
-                                            new List<Location>(speedboat.AddLocations(initLocation)),
-                                            direction,
-                                            _playerManager.GetPlayerTeam(player),
-                                            speedboat.Code
-                                        );
+                                InsertShip_InPlayer_OwnBoard(ship, initLocation, player, direction);
+                                _gameVM.AddShip_ToPlayerList(player, ship);
 
-                                        InsertShip_InPlayer_OwnBoard(speedboat, initLocation, player);
-                                        _gameVM.AddShip_ToPlayerList(player, speedboat);
+                                // Remove Quantity of ship type available to deploy. If it's 0 remaining to deploy,
+                                // then remove from the ShipsToDeploy list
+                                ship.RemoveQuantityToDeploy(playerShipsToDeployList);
 
-                                        // Remove Quantity of ship type available to deploy and checks if it is 0.
-                                        // If is 0, then removes from the ShipsToDeploy list
-                                        speedboat.RemoveQuantityToDeploy(playerShipsToDeployList);
-
-                                        view.ShipDeployed_Success();
-                                    }
-                                }
-                                else
-                                {
-                                    view.Unavailable_ShipsTypeToDeploy();
-                                }
-                            break;
-
-                            case "S": // Submarine
-                                var submarine = new Submarine();
-                                remainingShips = submarine.GetRemainingQuantity(playerShipsToDeployList);
-
-                                // Verify if there is available ships to deploy of that type
-                                if (remainingShips > 0)
-                                {
-                                    // Verify if surroundings are empty spaces
-                                    emptyAround = VerifySurroundings(player, initLocation, submarine, direction);
-
-                                    if (emptyAround)
-                                    {
-                                        // Creates submarine for the player
-                                        submarine = new Submarine(
-                                            ShipType.Submarine,
-                                            new List<Location>(submarine.AddLocations(initLocation, direction)),
-                                            direction,
-                                            _playerManager.GetPlayerTeam(player),
-                                            submarine.Code
-                                            );
-
-                                        InsertShip_InPlayer_OwnBoard(submarine, initLocation, player, direction);
-                                        _gameVM.AddShip_ToPlayerList(player, submarine);
-
-                                        // Remove Quantity of ship type available to deploy. If it's 0 remaining to deploy,
-                                        // then remove from the ShipsToDeploy list
-                                        submarine.RemoveQuantityToDeploy(playerShipsToDeployList);
-
-                                        view.ShipDeployed_Success();
-                                    }
-                                }
-                                else
-                                {
-                                    view.Unavailable_ShipsTypeToDeploy();
-                                }
-
-                                break;
-
-                            case "F": // Frigate
-                                var frigate = new Frigate();
-                                remainingShips = frigate.GetRemainingQuantity(playerShipsToDeployList);
-
-                                // Verify if there is available ships to deploy of that type
-                                if (remainingShips > 0)
-                                {
-                                    // Verify if surroundings are empty spaces
-                                    emptyAround = VerifySurroundings(player, initLocation, frigate, direction);
-
-                                    if (emptyAround)
-                                    {
-                                        // Creates submarine for the player
-                                        frigate = new Frigate(
-                                                ShipType.Frigate,
-                                                new List<Location>(frigate.AddLocations(initLocation, direction)),
-                                                direction,
-                                                _playerManager.GetPlayerTeam(player),
-                                                frigate.Code
-                                            );
-
-                                        InsertShip_InPlayer_OwnBoard(frigate, initLocation, player, direction);
-                                        _gameVM.AddShip_ToPlayerList(player, frigate);
-
-                                        // Remove Quantity of ship available to deploy
-                                        frigate.RemoveQuantityToDeploy(playerShipsToDeployList);
-
-                                        view.ShipDeployed_Success();
-                                    }
-                                }
-                                else
-                                {
-                                    view.Unavailable_ShipsTypeToDeploy();
-                                }
-
-                                break;
-
-                            case "C": // Cruiser
-                                var cruiser = new Cruiser();
-                                remainingShips = cruiser.GetRemainingQuantity(playerShipsToDeployList);
-
-                                // Verify if there is available ships to deploy of that type
-                                if (remainingShips > 0)
-                                {
-                                    // Verify if surroundings are empty spaces
-                                    emptyAround = VerifySurroundings(player, initLocation, cruiser, direction);
-
-                                    if (emptyAround)
-                                    {
-                                        // Creates cruiser for the player
-                                        cruiser = new Cruiser(
-                                            ShipType.Cruiser,
-                                            new List<Location>(cruiser.AddLocations(initLocation, direction)),
-                                            direction,
-                                            _playerManager.GetPlayerTeam(player),
-                                            cruiser.Code
-                                            );
-
-                                        InsertShip_InPlayer_OwnBoard(cruiser, initLocation, player, direction);
-                                        _gameVM.AddShip_ToPlayerList(player, cruiser);
-
-                                        // Remove Quantity of ship available to deploy
-                                        cruiser.RemoveQuantityToDeploy(playerShipsToDeployList);
-
-                                        view.ShipDeployed_Success();
-                                    }
-                                }
-                                else
-                                {
-                                    view.Unavailable_ShipsTypeToDeploy();
-                                }
-
-                                break;
-
-                            case "P": // Aircraft_Carrier
-                                var aircraft_carrier = new Aircraft_Carrier();
-                                remainingShips = aircraft_carrier.GetRemainingQuantity(playerShipsToDeployList);
-
-                                // Verify if there is available ships to deploy of that type
-                                if (remainingShips > 0)
-                                {
-                                    // Verify if surroundings are empty spaces
-                                    emptyAround = VerifySurroundings(player, initLocation, aircraft_carrier, direction);
-
-                                    if (emptyAround)
-                                    {
-                                        // Creates submarine for the player
-                                        aircraft_carrier = new Aircraft_Carrier(
-                                            ShipType.Aircraft_Carrier,
-                                            new List<Location>(aircraft_carrier.AddLocations(initLocation, direction)),
-                                            direction,
-                                            _playerManager.GetPlayerTeam(player),
-                                            aircraft_carrier.Code
-                                            );
-
-                                        InsertShip_InPlayer_OwnBoard(aircraft_carrier, initLocation, player, direction);
-                                        _gameVM.AddShip_ToPlayerList(player, aircraft_carrier);
-
-                                        // Remove Quantity of ship available to deploy
-                                        aircraft_carrier.RemoveQuantityToDeploy(playerShipsToDeployList);
-
-                                        view.ShipDeployed_Success();
-                                    }
-                                }
-                                else
-                                    view.Unavailable_ShipsTypeToDeploy();
-
-                                break;
+                                view.ShipDeployed_Success();
+                            }
+                        }
+                        else
+                        {
+                            view.Unavailable_ShipsTypeToDeploy();
                         }
                     }
                     else
@@ -386,7 +234,7 @@ namespace Battleship.Controllers
                                     
                                     attacker.Shots++;
                                     attacker.ShotsOnTargets++;
-                                    attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Hit, null, Direction.None, _playerManager.GetPlayerTeam(attacker), "X");
+                                    attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Hit, null, Direction.None, Code.Hit);
 
                                     defenderShip.ChangeShipState(attackLocation, defender);
 
@@ -419,8 +267,8 @@ namespace Battleship.Controllers
                                 else
                                 {
                                     attacker.Shots++;
-                                    attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Miss, null, Direction.None, _playerManager.GetPlayerTeam(attacker), "*");
-                                    defender.OwnBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Miss, null, Direction.None, _playerManager.GetPlayerTeam(defender), "*");
+                                    attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Miss, null, Direction.None, Code.Miss);
+                                    defender.OwnBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Miss, null, Direction.None, Code.Miss);
                                     Console.WriteLine("Tiro na água.\n");
                                 }
 
@@ -442,10 +290,10 @@ namespace Battleship.Controllers
             else
                 view.DisplayGameNotInProgress();
         }
-        private bool VerifySurroundings(Player player, Location initLocation, Ship ship, Direction? direction = null)
+        private bool VerifySurroundings(Player player, Location initLocation, Ship ship, Direction? direction = Direction.None)
         {
 
-            if (direction == null)
+            if (direction == Direction.None)
             {
                 int row = initLocation.Row;
                 int column = initLocation.Column;

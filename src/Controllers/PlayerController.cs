@@ -28,7 +28,7 @@ namespace Battleship.Controllers
          */
         public int GetPlayerTeam(Player player)
         {
-            return player.Name == _gameVM.GameInProgress_Players[0] ? 1 : 2;
+            return player.Name == _gameVM.GameInProgress_Players[0] ? 0 : 1;
         }
 
         public bool IsPlayerTurn(Player player)

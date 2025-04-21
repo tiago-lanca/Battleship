@@ -202,11 +202,11 @@ namespace Battleship.ViewModel
             Player1.ShipsToDeploy ??= new List<Ship>();
             Player1.ShipsToDeploy.AddRange(new List<Ship>
             {
-                new Speedboat(ShipType.Speedboat, null, Direction.None, 1, "L"),
-                        new Submarine(ShipType.Submarine, null, Direction.None, 1, "S"),
-                        new Frigate(ShipType.Frigate, null, Direction.None, 1, "F"),
-                        new Cruiser(ShipType.Cruiser, null, Direction.None, 1, "C"),
-                        new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, Direction.None, 1, "P")
+                new Speedboat(ShipType.Speedboat, null, Direction.None, Code.Speedboat),
+                new Submarine(ShipType.Submarine, null, Direction.None, Code.Submarine),
+                new Frigate(ShipType.Frigate, null, Direction.None, Code.Frigate),
+                new Cruiser(ShipType.Cruiser, null, Direction.None, Code.Cruiser),
+                new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, Direction.None, Code.Aircraft_Carrier)
             });
 
             // Setup Player 2
@@ -215,11 +215,11 @@ namespace Battleship.ViewModel
             Player2.ShipsToDeploy ??= new List<Ship>();
             Player2.ShipsToDeploy.AddRange(new List<Ship>
             {
-                new Speedboat(ShipType.Speedboat, null, Direction.None, 2, "L"),
-                        new Submarine(ShipType.Submarine, null, Direction.None, 2, "S"),
-                        new Frigate(ShipType.Frigate, null, Direction.None, 2, "F"),
-                        new Cruiser(ShipType.Cruiser, null, Direction.None, 2, "C"),
-                        new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, Direction.None, 2, "P")
+                new Speedboat(ShipType.Speedboat, null, Direction.None, Code.Speedboat),
+                new Submarine(ShipType.Submarine, null, Direction.None, Code.Submarine),
+                new Frigate(ShipType.Frigate, null, Direction.None, Code.Frigate),
+                new Cruiser(ShipType.Cruiser, null, Direction.None, Code.Cruiser),
+                new Aircraft_Carrier(ShipType.Aircraft_Carrier, null, Direction.None, Code.Aircraft_Carrier)
             });
         }
 

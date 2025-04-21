@@ -86,7 +86,7 @@ namespace Battleship.Views
                 for (int col = 0; col < boardOutline.letters.Length; col++)
                 {
                     if (player.AttackBoard[line, col] != null)
-                        Console.Write(player.AttackBoard[line, col].Placeholder);
+                        Console.Write((char)player.AttackBoard[line, col].Code);
                     else
                         Console.Write(" ");
 
@@ -122,7 +122,7 @@ namespace Battleship.Views
                 for (int col = 0; col < boardOutline.letters.Length; col++)
                 {
                     if (player.OwnBoard[line, col] != null)
-                        Console.Write(player.OwnBoard[line, col].Placeholder);
+                        Console.Write((char)player.OwnBoard[line, col].Code);
                     else
                         Console.Write(" ");
 

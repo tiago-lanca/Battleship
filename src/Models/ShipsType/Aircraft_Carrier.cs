@@ -10,13 +10,14 @@ namespace Battleship.Models.ShipsType
 {
     public class Aircraft_Carrier : Ship
     {
-        public readonly string Code = "P";
+        public override Code Code => Code.Aircraft_Carrier;
         public override int Size => 5;
         public override int Quantity { get; set; } = 1;
 
         public Aircraft_Carrier () { }
-        public Aircraft_Carrier(ShipType type, List<Location> location, Direction direction, int team, string placeholder, State state = State.Alive)
-            : base(type, location, direction, team, placeholder, state)
+        public Aircraft_Carrier(ShipType type) : base(type) { }
+        public Aircraft_Carrier(ShipType type, List<Location> location, Direction direction, Code code, State state = State.Alive)
+            : base(type, location, direction, code, state)
         {
             
         }

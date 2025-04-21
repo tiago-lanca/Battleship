@@ -12,13 +12,14 @@ namespace Battleship.Models.ShipsType
 {
     public class Submarine : Ship
     {
-        public string Code = "S";
+        public override Code Code => Code.Submarine;
         public override int Size => 2;
         public override int Quantity { get; set; } = 3;
 
         public Submarine() { }
-        public Submarine(ShipType type, List<Location> location, Direction direction, int team, string placeholder, State state = State.Alive)
-            : base(type, location, direction, team, placeholder, state)
+        public Submarine(ShipType type) : base(type) { }
+        public Submarine(ShipType type, List<Location> location, Direction direction, Code code, State state = State.Alive)
+            : base(type, location, direction, code, state)
         {
 
         }

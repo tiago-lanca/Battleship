@@ -12,7 +12,6 @@ namespace Battleship.Models.ShipsType
 {
     public class Submarine : Ship
     {
-        public override Code Code => Code.Submarine;
         public override int Size => 2;
         public override int Quantity { get; set; } = 3;
 

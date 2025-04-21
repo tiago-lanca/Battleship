@@ -10,7 +10,6 @@ namespace Battleship.Models.ShipsType
 {
     public class Aircraft_Carrier : Ship
     {
-        public override Code Code => Code.Aircraft_Carrier;
         public override int Size => 5;
         public override int Quantity { get; set; } = 1;
 

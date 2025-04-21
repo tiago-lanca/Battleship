@@ -22,7 +22,7 @@ namespace Battleship.Models
         public virtual int Size { get; }
         public List<Location>? Location { get; set; }
         public Direction Direction { get; set; }
-        public virtual Code Code { get; set; }
+        public Code Code { get; set; }
         public State State { get; set; }
 
         #endregion

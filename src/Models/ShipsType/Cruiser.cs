@@ -10,7 +10,6 @@ namespace Battleship.Models.ShipsType
 {
     public class Cruiser : Ship
     {
-        public override Code Code => Code.Cruiser;
         public override int Size => 4;
         public override int Quantity { get; set; } = 1;
 

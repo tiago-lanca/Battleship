@@ -10,7 +10,6 @@ namespace Battleship.Models.ShipsType
 {
     public class Frigate : Ship
     {
-        public override Code Code => Code.Frigate;
         public override int Size => 3;
         public override int Quantity { get; set; } = 2;
 

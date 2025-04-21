@@ -70,12 +70,10 @@ namespace Battleship.Controllers
                         List<Ship> playerShipsToDeployList = _gameVM.GetPlayerShipToDeployList(player);
 
                         var ship = Ship.CreateNewShip(type);
-                        if (ship is null) return;
-
-                        int remainingShips = ship.GetRemainingQuantity(playerShipsToDeployList);
+                        if(ship is null) { view.InvalidInstruction(); return; }
 
                         // Verify if there is available ships to deploy of that type
-                        if (remainingShips > 0)
+                        if (ship.GetRemainingQuantity(playerShipsToDeployList) > 0)
                         {
                             // Verify if surroundings are empty spaces
                             bool emptyAround = VerifySurroundings(player, initLocation, ship, direction);

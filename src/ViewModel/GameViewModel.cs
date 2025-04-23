@@ -2,6 +2,8 @@
 using Battleship.Interfaces;
 using Battleship.Models;
 using Battleship.Models.ShipsType;
+using Battleship.src.Models;
+using Battleship.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,8 +26,15 @@ namespace Battleship.ViewModel
         public string[]? GameInProgress_Players { get; set; } = new string[2];
         public bool GameInProgress { get; set; } = false;
         public bool CombatInitiated { get; set; } = false;
+
+        private readonly ViewConsole _view;
         #endregion
 
+        public GameViewModel(ViewConsole view)
+        {
+            _view = view;   
+        }
+        
         /**
          * Verifies if the player is in the active game
          * @param playerName
@@ -57,6 +66,8 @@ namespace Battleship.ViewModel
                    Player2.Name == name ? Player2 : null;
         }
 
+        public Player? GetDefenderPlayer(Player attacker) => Player1?.Name == attacker.Name ? Player2 : Player1;
+        
         // Returns true if the given player has ships to deploy, otherwise returns false
         public bool PlayerShipsToDeploy_Empty(Player player)
         {
@@ -174,6 +185,169 @@ namespace Battleship.ViewModel
             
         }
 
+        public bool VerifySurroundings(Player player, Location initLocation, Ship ship, Direction? direction = Direction.None)
+        {
+            Ship nextSpace;
+            Location newLocation;
+
+            if (direction == Direction.None)
+            {
+
+                nextSpace = player.OwnBoard[initLocation.Row, initLocation.Column];
+                // Verify if the next space is empty
+                if (nextSpace != null)
+                {
+                    _view.InvalidPosition();
+                    return false;
+                }
+
+                return IsEmptyAround(player, initLocation);
+            }
+
+            switch (direction)
+            {
+                case Direction.E:
+                    for (int i = 0; i < ship.Size; i++)
+                    {
+                        newLocation = new Location(initLocation.Row, initLocation.Column + i); // Right
+
+                        if (!IsInLimits(newLocation))
+                        {
+                            _view.InvalidPosition();
+                            return false;
+                        }
+
+                        nextSpace = player.OwnBoard[initLocation.Row, initLocation.Column];
+                        if (nextSpace != null)
+                        {
+                            _view.InvalidPosition();
+                            return false;
+                        }
+
+                        if (!IsEmptyAround(player, initLocation))
+                            return false;
+                    }
+                    return true;
+
+                case Direction.N:
+                    for (int i = 0; i < ship.Size; i++)
+                    {
+                        newLocation = new Location(initLocation.Row - 1, initLocation.Column); // Up
+
+                        if (!IsInLimits(newLocation))
+                        {
+                            _view.InvalidPosition();
+                            return false;
+                        }
+
+                        nextSpace = player.OwnBoard[initLocation.Row, initLocation.Column];
+                        // Verify if the next space is empty
+                        if (nextSpace != null)
+                        {
+                            _view.InvalidPosition();
+                            return false;
+                        }
+
+                        if (!IsEmptyAround(player, initLocation))
+                            return false;
+                    }
+                    return true;
+
+                case Direction.S:
+                    for (int i = 0; i < ship.Size; i++)
+                    {
+                        newLocation = new Location(initLocation.Row + 1, initLocation.Column); // Down
+
+                        if (!IsInLimits(newLocation))
+                        {
+                            _view.InvalidPosition();
+                            return false;
+                        }
+
+                        nextSpace = player.OwnBoard[initLocation.Row, initLocation.Column];
+                        // Verify if the next space is empty
+                        if (nextSpace != null)
+                        {
+                            _view.InvalidPosition();
+                            return false;
+                        }
+
+                        if (!IsEmptyAround(player, initLocation))
+                            return false;
+                    }
+                    return true;
+
+                case Direction.O:
+                    for (int i = 0; i < ship.Size; i++)
+                    {
+                        newLocation = new Location(initLocation.Row, initLocation.Column - i); // Left
+
+                        if (!IsInLimits(newLocation))
+                        {
+                            _view.InvalidPosition();
+                            return false;
+                        }
+
+                        nextSpace = player.OwnBoard[initLocation.Row, initLocation.Column];
+                        // Verify if the next space is empty
+                        if (nextSpace != null)
+                        {
+                            _view.InvalidPosition();
+                            return false;
+                        }
+
+                        if (!IsEmptyAround(player, initLocation))
+                            return false;
+                    }
+                    return true;
+                    
+
+                default:
+                    _view.InvalidPosition();
+                    return false;
+            }
+
+        }
+        public bool IsEmptyAround(Player player, Location location)
+        {
+            // Check positions around
+            var positionsToCheck = new (int, int)[]
+            {
+                        (location.Row - 1, location.Column),
+                        (location.Row + 1, location.Column),
+                        (location.Row, location.Column + 1),
+                        (location.Row, location.Column - 1),
+                        (location.Row - 1, location.Column - 1),
+                        (location.Row - 1, location.Column + 1),
+                        (location.Row + 1, location.Column - 1),
+                        (location.Row + 1, location.Column +1)
+            };
+
+            foreach (var (r, col) in positionsToCheck)
+            {
+                if (IsInLimits(new Location(r, col)) && player.OwnBoard[r, col] != null)
+                {
+                    _view.InvalidPosition();
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public void RegistMissedShot(Player attacker, Player defender, Location attackLocation)
+        {
+            attacker.AddShotStats(shots: 1);
+            attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Miss, null, Direction.None, Code.Miss);
+            defender.OwnBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Miss, null, Direction.None, Code.Miss);
+        }
+
+        public void RegistHitShot(Player attacker, Player defender, Location attackLocation)
+        {
+            attacker.AddShotStats(shots: 1, shotsOnTargets: 1);
+            attacker.AttackBoard[attackLocation.Row, attackLocation.Column] = new Ship(ShipType.Hit, null, Direction.None, Code.Hit);
+        }
+
         // Manage the turn of the players to verify who is going to play and manage the [FirstShot] variable
         public void ManageTurn(Player player)
         {
@@ -229,5 +403,15 @@ namespace Battleship.ViewModel
             player.ShotsOnTargets = 0;
             player.EnemySunkShips = 0;
         }
+
+        public bool IsInLimits(Location location) =>
+           location.Row >= 0 && location.Row < 10 && location.Column >= 0 && location.Column < 10;
+
+        public bool IsInRowLimits(int row) =>
+            row >= 0 && row < 10;
+
+        public bool IsInColumnLimits(int column) =>
+            column >= 0 && column < 10;
+
     }
 }

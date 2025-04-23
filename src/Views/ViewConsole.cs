@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -220,6 +221,11 @@ namespace Battleship.Views
         public void DisplayAlreadySunkShip(Ship defenderShip, IGameViewModel gameVM)
         {
             Console.WriteLine("Posição irregular. Essa localização do navio já foi afundada.\n");
+        }
+
+        public void DisplayMissedShot()
+        {
+            Console.WriteLine("Tiro na água.\n");
         }
     }
 }

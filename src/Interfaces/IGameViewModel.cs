@@ -1,4 +1,5 @@
 ﻿using Battleship.Models;
+using Battleship.src.Models;
 using Battleship.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,12 @@ namespace Battleship.Interfaces
         void ChangeTurn();
         void SetupPlayersIntoGame(Player player1, Player player2);
         Player? FindPlayerInGameByName(string name);
-
+        Player? GetDefenderPlayer(Player attacker);
+        void RegistMissedShot(Player attacker, Player defender, Location attackLocation);
+        void RegistHitShot(Player attacker, Player defender, Location attackLocation);
+        bool VerifySurroundings(Player player, Location initLocation, Ship ship, Direction? direction);
+        bool IsInLimits(Location location);
+        bool IsEmptyAround(Player player, Location location);
         #endregion
     }
 }

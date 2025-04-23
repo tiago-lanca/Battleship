@@ -1,5 +1,6 @@
 ﻿using Battleship.Controllers;
 using Battleship.Interfaces;
+using Battleship.src.Models;
 using Battleship.ViewModel;
 using System;
 using System.Collections.Generic;

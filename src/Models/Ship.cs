@@ -1,5 +1,6 @@
 ﻿using Battleship.Interfaces;
 using Battleship.Models.ShipsType;
+using Battleship.src.Models;
 using Battleship.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace Battleship.Models
         
         public Ship() { }
         public Ship(ShipType type) { Type = type; }
-        public Ship(ShipType type, List<Location> location, Direction direction, Code code, State state = State.Alive)
+        public Ship(ShipType type, List<Location>? location, Direction direction, Code code, State state = State.Alive)
         {
             Type = type;
             Location = location;
@@ -105,20 +106,20 @@ namespace Battleship.Models
             };
         }
 
-        public static Ship? CreateNewShip(string type)
+        public static Ship? CreateNewShip(Code type)
         {
             return type switch
             {
-                "L" => new Speedboat(type: ShipType.Speedboat),
-                "S" => new Submarine(type: ShipType.Submarine),
-                "F" => new Frigate(type: ShipType.Frigate),
-                "C" => new Cruiser(type: ShipType.Cruiser),
-                "P" => new Aircraft_Carrier(type: ShipType.Aircraft_Carrier),
+                Code.Speedboat => new Speedboat(type: ShipType.Speedboat),
+                Code.Submarine => new Submarine(type: ShipType.Submarine),
+                Code.Frigate => new Frigate(type: ShipType.Frigate),
+                Code.Cruiser => new Cruiser(type: ShipType.Cruiser),
+                Code.Aircraft_Carrier => new Aircraft_Carrier(type: ShipType.Aircraft_Carrier),
                 _ => null,
             };
         }
 
-        public Ship? CreateNewShip(ShipType type, List<Location> shipLocations, Direction direction, Code code)
+        public static Ship? CreateNewShip(ShipType type, List<Location> shipLocations, Direction direction, Code code)
         {
             return type switch
             {
@@ -203,6 +204,16 @@ namespace Battleship.Models
             return locations;
         }
 
+        public static Ship? GetShipFromOwnBoard(Player player, Location location) => player.OwnBoard[location.Row, location.Column];
+        
+        public void RemoveShip(Player player, IGameViewModel gameVM)
+        {
+            List<Ship> playerShipsToDeployList = gameVM.GetPlayerShipToDeployList(player);
+            RemoveOnBoard(player);
+
+            if (playerShipsToDeployList.Find(s => s.Type == this.Type) is null)
+                playerShipsToDeployList.Add(this);
+        }
         /**
          * Remove the ship from the OwnBoard of the given player
          * @param player , is the player who owns the ship to remove on OwnBoard
@@ -265,19 +276,8 @@ namespace Battleship.Models
         Cruiser = 'C',
         Aircraft_Carrier = 'P',
         Hit = 'X',
-        Miss = '*'
+        Miss = '*',
+        Null = ' '
     }
-    public class Location
-    {
-        public int Row { get; set; }
-        public int Column { get; set; }
-
-        public Location(int row, int column)
-        {
-            Row = row;
-            Column = column;
-        }
-
-        public override string ToString() => $"Row: {Row} / Column: {Column}";
-    }
+    
 }

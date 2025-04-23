@@ -1,6 +1,7 @@
 ﻿using Battleship.Extensions;
 using Battleship.Interfaces;
 using Battleship.Models;
+using Battleship.src.Models;
 using Battleship.ViewModel;
 using Battleship.Views;
 using System;
@@ -74,16 +75,16 @@ namespace Battleship.Controllers
 
                 case "CN": // Setup Ships
                     if (words.Length.HasRequiredInputs(5))
-                        _gameController.Setup_Ship(_gameVM.FindPlayerInGameByName(words[1]), words[2], words[3], words[4]);
+                        _gameController.Setup_Ship(_gameVM.FindPlayerInGameByName(words[1]), GetShipCode(words[2]), Location.GetLocation(row: words[3], column: words[4]));
                     else if (words.Length.HasRequiredInputs(6))
-                        _gameController.Setup_Ship(_gameVM.FindPlayerInGameByName(words[1]), words[2], words[3], words[4], GetDirection(words[5]));
+                        _gameController.Setup_Ship(_gameVM.FindPlayerInGameByName(words[1]), GetShipCode(words[2]), Location.GetLocation(row: words[3], column: words[4]), GetDirection(words[5]));
                     else
                         view.InvalidInstruction();
                     break;
 
                 case "RN": // Remove Ship
                     if (words.Length.HasRequiredInputs(4))
-                        _gameController.RemoveShip(_gameVM.FindPlayerInGameByName(words[1]), words[2], words[3]);
+                        _gameController.RemoveShip(_gameVM.FindPlayerInGameByName(words[1]), Location.GetLocation(row: words[2], column: words[3]));
                     else
                         view.InvalidInstruction();
                     break;
@@ -91,7 +92,7 @@ namespace Battleship.Controllers
                 case "T": // Execute Attack
                     if (words.Length.HasRequiredInputs(4))
                         if (_gameVM.CombatInitiated) 
-                            _gameController.MakeAttack(_gameVM.FindPlayerInGameByName(words[1]), words[2], words[3]);
+                            _gameController.MakeAttack(_gameVM.FindPlayerInGameByName(words[1]), Location.GetLocation(row: words[2], column: words[3]));
                         else view.InvalidInstruction();
                     else
                         view.InvalidInstruction();
@@ -148,7 +149,19 @@ namespace Battleship.Controllers
                 _ => Direction.None,
             };
         }
-
+        
+        public Code GetShipCode(string type)
+        {
+            return type.ToUpper() switch
+            {
+                "L" => Code.Speedboat,
+                "S" => Code.Submarine,
+                "F" => Code.Frigate,
+                "C" => Code.Cruiser,
+                "P" => Code.Aircraft_Carrier,
+                _ => Code.Null,
+            };
+        }
         public void UpdateGameViewModel(GameViewModel newGameVM) =>
             _gameVM = newGameVM; 
     }

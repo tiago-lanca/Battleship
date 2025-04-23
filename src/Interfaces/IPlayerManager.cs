@@ -11,7 +11,7 @@ namespace Battleship.Interfaces
     {
         int GetPlayerTeam(Player player);
         bool IsPlayerTurn(Player player);
-        void AddStatsToPlayers(Player attacker, Player defender);
+        void AddNrGames(Player attacker, Player defender);
         void ResetInGameStats(Player player);
         int GetTurn(bool turn);
     }

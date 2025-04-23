@@ -41,7 +41,7 @@ namespace Battleship.Controllers
          * @param attacker
          * @param defender
          */
-        public void AddStatsToPlayers(Player attacker, Player defender)
+        public void AddNrGames(Player attacker, Player defender)
         {
             attacker.NumVictory++;
             attacker.NumGames++;

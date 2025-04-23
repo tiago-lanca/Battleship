@@ -27,7 +27,7 @@ namespace Battleship
             // Creating the objects manually for dependency injection purposes
             IPlayerList playerList = new PlayerList();
             ViewConsole view = new ViewConsole();
-            IGameViewModel gameVM = new GameViewModel();            
+            IGameViewModel gameVM = new GameViewModel(view);            
             IPlayerManager playerManager = new PlayerController(gameVM);
             GameController gameController = new GameController(gameVM, playerManager);
             ICommandManager commandManager = new CommandController(gameVM, gameController, playerManager, playerList);

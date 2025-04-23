@@ -29,6 +29,13 @@ namespace Battleship.Models
             NumVictory = 0;
         }
 
+        public void AddShotStats(int shots = 0, int shotsOnTargets = 0, int  enemySunkShips = 0)
+        {
+            Shots += shots;
+            ShotsOnTargets += shotsOnTargets;
+            EnemySunkShips += enemySunkShips;
+        }
+
         public override string ToString()
         {
             return $"{Name} {NumGames} {NumVictory}";

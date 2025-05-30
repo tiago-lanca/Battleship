@@ -90,10 +90,8 @@ namespace Battleship.Controllers
                     break;
 
                 case "T": // Execute Attack
-                    if (words.Length.HasRequiredInputs(4))
-                        if (_gameVM.CombatInitiated) 
-                            _gameController.MakeAttack(_gameVM.FindPlayerInGameByName(words[1]), Location.GetLocation(row: words[2], column: words[3]));
-                        else view.InvalidInstruction();
+                    if (words.Length.HasRequiredInputs(4)) 
+                        _gameController.MakeAttack(_gameVM.FindPlayerInGameByName(words[1]), Location.GetLocation(row: words[2], column: words[3]));
                     else
                         view.InvalidInstruction();
                     break;

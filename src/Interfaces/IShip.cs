@@ -12,7 +12,7 @@ namespace Battleship.Interfaces
 {
     public interface IShip<T>
     {
-        public int GetRemainingQuantity(List<T> playerShipToDeployList);
+        public int? GetRemainingQuantity(List<T> playerShipToDeployList);
         public void RemoveQuantityToDeploy(List<T> playerShipToDeployList);
         public List<Location> AddLocations(Location initLocation, Direction? direction);
         public bool Is_ShipSunk(Player attacker);

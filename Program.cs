@@ -34,7 +34,7 @@ namespace Battleship
             string command;
 
             // Executing automated inputs for testing 
-            var inputs = new StringReader("RJ tiago\nRJ diogo\nIJ tiago diogo\n" +
+            /*var inputs = new StringReader("RJ tiago\nRJ diogo\nIJ tiago diogo\n" +
                 "CN tiago P 1 A E\nCN tiago C 2 I S\nCN tiago F 3 B S\nCN tiago F 10 H E\nCN tiago S 3 F S\n" +
                 "CN tiago S 8 F S\nCN tiago S 10 C O\nCN tiago L 8 B\nCN tiago L 6 E\nCN tiago L 6 G\nCN tiago L 7 I\n" +
                 "CN diogo P 1 A E\nCN diogo C 2 I S\nCN diogo F 3 B S\nCN diogo F 10 H E\nCN diogo S 3 F S\n" +
@@ -57,7 +57,9 @@ namespace Battleship
             Console.SetIn(new StreamReader(Console.OpenStandardInput()));
             // ------------------------------------------------------  //
                             // Stops the automated inputs //
-
+            */
+            
+            
             do
             {
                 command = view.GetCommand();

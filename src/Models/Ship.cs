@@ -44,8 +44,9 @@ namespace Battleship.Models
          * @param playerShipToDeployList , the playerList of ships available to deploy
          * @return the number of ships's type remaining to deploy
          */
-        public int GetRemainingQuantity(List<Ship> playerShipToDeployList) =>            
-            playerShipToDeployList.FirstOrDefault(ship => ship.Type == Type).Quantity;
+        public int? GetRemainingQuantity(List<Ship> playerShipToDeployList) =>            
+            playerShipToDeployList.FirstOrDefault(ship => ship.Type == Type) is null ? 
+                0 : playerShipToDeployList.FirstOrDefault(ship => ship.Type == Type).Quantity;
 
         /**
          * Remove the quantity of ship (type) to deploy

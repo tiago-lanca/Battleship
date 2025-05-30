@@ -175,7 +175,7 @@ namespace Battleship.Views
         }
         public void DisplayPlayerShipListEmpty()
         {
-            Console.WriteLine("Não é possivel colocar navio.\n");
+            Console.WriteLine("Não é possivel colocar navios.\n");
         }
         public void DisplayCombatInitiate()
         {

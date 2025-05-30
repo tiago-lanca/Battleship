@@ -4,7 +4,9 @@
  <!-- TABLE OF CONTENTS -->
 ### Indice
 - [💻 Sobre o projeto](#-sobre-o-projeto)
-- [📂 Estruturas de Dados](#estruturas-de-dados)
+- [🚀 Como executar o projeto](#-como-executar-o-projeto)
+- [Organização e Estruturação do Projeto](#organizacao-e-estruturacao-do-projeto)
+- [📂 Estruturas de Dados](#-estruturas-de-dados)
 
 
 ## 💻 Sobre o projeto
@@ -70,7 +72,7 @@ Este projeto foi organizado e estruturado com base no modelo MVC (Model-View-Con
  - IGameViewModel (Referente ao jogo)
 
 
-## Estruturas de Dados
+## 📂 Estruturas de Dados
 Neste projeto foram usadas diversas estruturas de dados, como:
 - Arrays (Para armazenar jogadores em jogo).
 - Arrays Bidimensionais (Para a estruturação do tabuleiro de jogo).

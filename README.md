@@ -5,8 +5,8 @@
 ### Indice
 - [💻 Sobre o projeto](#-sobre-o-projeto)
 - [🚀 Como executar o projeto](#-como-executar-o-projeto)
-- [Organização e Estruturação do Projeto](#organizacao-e-estruturacao-do-projeto)
-- [📂 Estruturas de Dados](#-estruturas-de-dados)
+- [📚 Organização e estruturação do projeto](#-organização-e-estruturação-do-projeto)
+- [📂 Estruturas de dados](#-estruturas-de-dados)
 
 
 ## 💻 Sobre o projeto
@@ -42,7 +42,7 @@ afundado. O jogo termina quando um jogador afunda toda a frota do adversário.
         dotnet run
        ```
 
-## Organização e Estruturação do Projeto
+## 📚 Organização e estruturação do projeto
 
 Este projeto foi organizado e estruturado com base no modelo MVC (Model-View-Controller) usando tambem Interfaces para implementar funcionalidades.
 
@@ -72,7 +72,7 @@ Este projeto foi organizado e estruturado com base no modelo MVC (Model-View-Con
  - IGameViewModel (Referente ao jogo)
 
 
-## 📂 Estruturas de Dados
+## 📂 Estruturas de dados
 Neste projeto foram usadas diversas estruturas de dados, como:
 - Arrays (Para armazenar jogadores em jogo).
 - Arrays Bidimensionais (Para a estruturação do tabuleiro de jogo).
